@@ -154,7 +154,7 @@ const cases = [
     ],
     testing: "295 Vitest tests covering the strip map and node pruning, Ohm and Kirchhoff validation, RC and RL time constants, transistor saturation and cutoff, logic families and flip-flop edge capture, comparator hysteresis, UART, I²C and SPI decoding, AC sweeps against known cutoff and resonance, plus every prepared experiment built and solved and every lesson completed through its own solution circuit.",
     outcome: "The build ships 32 prepared experiments, six development boards from Uno to STM32, more than forty component models, oscilloscope, multimeter and a logic analyzer that decodes UART, I²C and SPI, small-signal AC sweeps with Bode magnitude and phase, and step-by-step lessons whose checks read the actual circuit so a step only passes when the wiring is right.",
-    proof: "The running lab: a traffic-light experiment loaded from the catalogue, solving in 9.1 ms per step across 25 nodes with the deterministic circuit analysis reporting a clean board.",
+    proof: "The running lab: an RC low-pass built with a 159 nF capacitor, swept from 1 Hz to 100 kHz, with the Bode magnitude and phase traces below and the −3 dB corner reported at 1 kHz — where that resistor and capacitor should put it. The status bar shows the solver stepping in 0.8 ms, and the deterministic analysis reporting a clean board.",
     limitation: "There is no public deployment yet, so the work cannot be tried from a link, and the repository stays private. The interpreter is a C-like subset rather than real AVR emulation, browser-local project storage is not durable, and the AI assistant needs a Supabase Edge Function and an OpenAI key before it will run.",
   },
   {
