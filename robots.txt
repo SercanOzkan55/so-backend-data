@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://sercanozkan55.github.io/so-backend-data/sitemap.xml

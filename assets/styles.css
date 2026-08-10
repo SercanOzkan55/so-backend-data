@@ -58,3 +58,75 @@ a:focus-visible{outline:3px solid var(--stamp);outline-offset:4px}
 .cta{box-shadow:14px 14px 0 var(--mint)}
 @media(max-width:850px){.hero{grid-template-columns:1fr;gap:55px}.hero-panel{max-width:650px}.expertise{grid-template-columns:1fr}.process-grid{grid-template-columns:1fr}.process-grid article,.process-grid article+article{padding:28px 0;border-right:0;border-bottom:1px solid #405052}}
 @media(max-width:600px){.site-header nav{gap:12px}.nav-cv{display:none}.hero{padding:52px 0 70px}.hero-panel{box-shadow:10px 10px 0 var(--mint);transform:none}.panel-feature{padding:24px}.panel-grid{grid-template-columns:1fr}.panel-grid a{min-height:125px}.hero-links{gap:15px}.expertise{padding:48px 0}.process{padding:75px 0}}
+
+/* recruiter-facing pass: positioning, evidence, experience, diagrams */
+.skip{position:absolute;left:-9999px;top:0;z-index:20;padding:12px 18px;background:var(--ink);color:#fff;font-weight:600}
+.skip:focus{left:12px;top:12px}
+.hero-name{margin:22px 0 6px;font-size:.78rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+.hero h1{margin-bottom:18px}
+.hero .actions{flex-wrap:wrap;margin-top:28px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 0;padding:0;list-style:none}
+.chips li{padding:7px 12px;border:1px solid var(--line);background:rgba(255,255,255,.6);font:.7rem 'IBM Plex Mono';text-transform:uppercase;letter-spacing:.04em}
+.chips.wide li{background:transparent;border-color:var(--signal);color:var(--signal)}
+.metrics b{font-size:2.4rem}
+.metrics-note{margin:18px auto 0;font-size:.7rem;color:var(--muted);text-align:center;line-height:1.6}
+.featured{padding-bottom:40px}
+.featured-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center;margin-top:36px}
+.featured-img{display:block;border:1px solid var(--line);box-shadow:14px 14px 0 var(--mint);background:var(--soft);overflow:hidden}
+.featured-img img{width:100%;aspect-ratio:16/10;object-fit:cover;object-position:top center}
+.featured-grid h2{margin:0 0 6px}
+.featured-line{font:600 1.35rem/1.4 Fraunces,serif;color:var(--stamp);margin:0 0 14px}
+.featured-grid>div>p{color:var(--muted);line-height:1.7}
+.featured .actions{flex-wrap:wrap;margin-top:26px}
+.card-line{font:600 1.15rem/1.35 Fraunces,serif;color:var(--ink);margin:6px 0 0}
+.card-role{margin:14px 0 0;font-size:.92rem;line-height:1.6;color:var(--muted)}
+.card-role b{display:block;font:.66rem 'IBM Plex Mono';text-transform:uppercase;letter-spacing:.08em;color:var(--stamp);margin-bottom:3px}
+.card .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+.card .button{padding:11px 16px;font-size:.85rem}
+.button.muted{border-style:dashed;color:var(--muted);cursor:default}
+.experience{padding:100px 0;border-block:1px solid var(--line);background:rgba(255,255,255,.45)}
+.exp-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:70px;margin-top:34px}
+.exp-head h2{margin:0 0 10px;font-size:clamp(2rem,3.2vw,2.9rem)}
+.exp-org{font-weight:600;margin:0 0 4px}
+.exp-period{color:var(--muted);font-size:.78rem;margin:0 0 20px}
+.exp-list{margin:0;padding:0;list-style:none}
+.exp-list li{padding:18px 0;border-top:1px solid var(--line);color:var(--muted);line-height:1.7}
+.exp-list li:first-child{border-top:0;padding-top:0}
+.process-grid.five{grid-template-columns:repeat(5,1fr)}
+.process-grid.five article{padding:28px 22px 20px 0}
+.process-grid.five h3{font-size:1.3rem;margin:20px 0 10px}
+.process-grid.five p{font-size:.93rem}
+.cta .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px}
+/* .cta paints its children white; the light button needs its own ink back */
+.button.light{color:var(--ink);border-color:#fff}
+.button.light:hover{box-shadow:5px 5px 0 var(--night)}
+.overview{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin:0 auto 60px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.overview>div{padding:26px 26px 26px 0;border-right:1px solid var(--line)}
+.overview>div:last-child{border-right:0;padding-right:0}
+.overview dt{font-size:.66rem;text-transform:uppercase;letter-spacing:.09em;color:var(--stamp);margin-bottom:8px}
+.overview dd{margin:0;color:var(--muted);line-height:1.55;font-size:.95rem}
+.arch{padding-bottom:70px}
+.arch h2{font:600 clamp(2rem,3.4vw,3rem)/1 Fraunces,serif;margin:6px 0 32px}
+.diagram{width:100%;height:auto;background:rgba(255,255,255,.5);border:1px solid var(--line);padding:26px 0}
+.dg-node rect{fill:#fff;stroke:var(--line);stroke-width:1}
+.dg-node.dg-primary rect{fill:var(--night);stroke:var(--night)}
+.dg-node.dg-primary .dg-label{fill:#fff}
+.dg-node.dg-primary .dg-sub{fill:#a9bbb8}
+.dg-node.dg-accent rect{fill:var(--mint);stroke:var(--signal)}
+.dg-label{font:600 14px 'IBM Plex Sans';fill:var(--ink);text-anchor:middle}
+.dg-sub{font:11px 'IBM Plex Mono';fill:var(--muted);text-anchor:middle}
+.dg-tier{font:11px 'IBM Plex Mono';fill:var(--stamp);letter-spacing:.1em}
+.dg-note{font:11px 'IBM Plex Mono';fill:var(--muted)}
+.dg-arrow{stroke:var(--signal);stroke-width:1.5;fill:none}
+.dg-headfill{fill:var(--signal)}
+.case-hero .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
+.decisions{margin:0}
+.decisions>div{padding:22px 0;border-top:1px solid var(--line)}
+.decisions dt{font:600 1.25rem/1.35 Fraunces,serif;color:var(--ink);margin-bottom:8px}
+.decisions dd{margin:0;color:var(--muted);line-height:1.7;font-size:1.05rem}
+@media(max-width:850px){.featured-grid{grid-template-columns:1fr;gap:34px}.exp-grid{grid-template-columns:1fr;gap:34px}.overview{grid-template-columns:1fr 1fr}.overview>div{padding:22px}.overview>div:nth-child(2n){border-right:0}.overview>div:nth-child(-n+2){border-bottom:1px solid var(--line)}.process-grid.five{grid-template-columns:1fr 1fr}}
+/* the 2026 refresh re-sized .hero h1 after the mobile rules, so the longer
+   headline overflowed the viewport and dragged the whole page sideways */
+.hero h1{overflow-wrap:break-word}
+@media(max-width:700px){.hero h1{font-size:clamp(2.4rem,10.5vw,3.6rem)}.hero .actions .button{flex:1 1 auto;justify-content:center}.chips li{font-size:.66rem}}
+@media(max-width:600px){.overview{grid-template-columns:1fr}.overview>div{border-right:0;border-bottom:1px solid var(--line);padding:20px 0}.overview>div:last-child{border-bottom:0}.experience{padding:70px 0}.process-grid.five{grid-template-columns:1fr}.diagram{padding:16px 0}.featured-img{box-shadow:8px 8px 0 var(--mint)}}
