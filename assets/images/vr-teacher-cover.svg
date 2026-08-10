@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750" role="img" aria-labelledby="title desc">
+  <title id="title">VR Teacher immersive learning system</title>
+  <desc id="desc">A project cover showing a virtual classroom, grounded PDF knowledge, voice questions, and an electronics lab.</desc>
+  <defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#162738"/><stop offset="1" stop-color="#102019"/></linearGradient></defs>
+  <rect width="1200" height="750" fill="url(#bg)"/>
+  <text x="70" y="95" fill="#75d3b5" font-family="Arial, sans-serif" font-size="26" letter-spacing="5">IMMERSIVE LEARNING SYSTEM</text>
+  <text x="70" y="190" fill="#f3f6f5" font-family="Georgia, serif" font-weight="700" font-size="88">VR Teacher</text>
+  <text x="75" y="240" fill="#a9bbc2" font-family="Arial, sans-serif" font-size="25">Unity classroom + grounded voice assistant + electronics lab</text>
+  <g transform="translate(70 320)">
+    <rect width="285" height="250" rx="22" fill="#22394b" stroke="#75d3b5" stroke-width="2"/>
+    <path d="M80 72h125v106H80z" fill="#f3f6f5"/><path d="M99 101h86M99 126h86M99 151h58" stroke="#607383" stroke-width="7"/>
+    <text x="50" y="220" fill="#f3f6f5" font-family="Arial" font-size="23">Experiment PDF</text>
+  </g>
+  <path d="M375 445h90" stroke="#75d3b5" stroke-width="5"/><path d="M445 428l25 17-25 17" fill="none" stroke="#75d3b5" stroke-width="5"/>
+  <g transform="translate(480 320)">
+    <rect width="285" height="250" rx="22" fill="#22394b" stroke="#75d3b5" stroke-width="2"/>
+    <path d="M95 132c0-48 23-79 48-79s48 31 48 79" fill="none" stroke="#f3f6f5" stroke-width="13"/><path d="M72 132v35h28v-35M186 132v35h28v-35" fill="none" stroke="#f3f6f5" stroke-width="13"/>
+    <text x="58" y="220" fill="#f3f6f5" font-family="Arial" font-size="23">Voice + RAG</text>
+  </g>
+  <path d="M785 445h90" stroke="#75d3b5" stroke-width="5"/><path d="M855 428l25 17-25 17" fill="none" stroke="#75d3b5" stroke-width="5"/>
+  <g transform="translate(890 320)">
+    <rect width="240" height="250" rx="22" fill="#22394b" stroke="#75d3b5" stroke-width="2"/>
+    <rect x="45" y="62" width="150" height="95" rx="8" fill="#eef2ef"/>
+    <g fill="#71817d"><circle cx="70" cy="90" r="5"/><circle cx="95" cy="90" r="5"/><circle cx="120" cy="90" r="5"/><circle cx="145" cy="90" r="5"/><circle cx="170" cy="90" r="5"/><circle cx="70" cy="120" r="5"/><circle cx="95" cy="120" r="5"/><circle cx="120" cy="120" r="5"/><circle cx="145" cy="120" r="5"/><circle cx="170" cy="120" r="5"/></g>
+    <text x="38" y="220" fill="#f3f6f5" font-family="Arial" font-size="23">VR electronics lab</text>
+  </g>
+  <text x="70" y="665" fill="#a9bbc2" font-family="monospace" font-size="20">UNITY 2022.3 / FASTAPI / CHROMADB / XR INTERACTION TOOLKIT</text>
+</svg>

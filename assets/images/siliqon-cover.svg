@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750" role="img" aria-labelledby="title desc">
+  <title id="title">Siliqon browser electronics laboratory</title>
+  <desc id="desc">A technical project cover showing a breadboard, circuit nodes, and a simulation trace.</desc>
+  <rect width="1200" height="750" fill="#111820"/>
+  <g stroke="#273747" stroke-width="1" opacity=".8">
+    <path d="M0 75h1200M0 150h1200M0 225h1200M0 300h1200M0 375h1200M0 450h1200M0 525h1200M0 600h1200M0 675h1200"/>
+    <path d="M75 0v750M150 0v750M225 0v750M300 0v750M375 0v750M450 0v750M525 0v750M600 0v750M675 0v750M750 0v750M825 0v750M900 0v750M975 0v750M1050 0v750M1125 0v750"/>
+  </g>
+  <text x="70" y="105" fill="#39d9c2" font-family="Arial, sans-serif" font-size="27" letter-spacing="5">BROWSER ELECTRONICS LAB</text>
+  <text x="70" y="195" fill="#f3f6f5" font-family="Georgia, serif" font-weight="700" font-size="92">Siliqon</text>
+  <text x="75" y="245" fill="#9eb1bf" font-family="Arial, sans-serif" font-size="26">React + PixiJS + real-time circuit simulation</text>
+  <rect x="70" y="315" width="650" height="300" rx="18" fill="#eef2ef"/>
+  <path d="M110 370h570M110 560h570" stroke="#d84b4b" stroke-width="8"/>
+  <path d="M110 395h570M110 535h570" stroke="#436bd6" stroke-width="8"/>
+  <g fill="#8c9794">
+    <circle cx="150" cy="450" r="7"/><circle cx="205" cy="450" r="7"/><circle cx="260" cy="450" r="7"/><circle cx="315" cy="450" r="7"/><circle cx="370" cy="450" r="7"/><circle cx="425" cy="450" r="7"/><circle cx="480" cy="450" r="7"/><circle cx="535" cy="450" r="7"/><circle cx="590" cy="450" r="7"/><circle cx="645" cy="450" r="7"/>
+    <circle cx="150" cy="490" r="7"/><circle cx="205" cy="490" r="7"/><circle cx="260" cy="490" r="7"/><circle cx="315" cy="490" r="7"/><circle cx="370" cy="490" r="7"/><circle cx="425" cy="490" r="7"/><circle cx="480" cy="490" r="7"/><circle cx="535" cy="490" r="7"/><circle cx="590" cy="490" r="7"/><circle cx="645" cy="490" r="7"/>
+  </g>
+  <path d="M810 515c55-190 110 190 165 0s110 190 165 0" fill="none" stroke="#39d9c2" stroke-width="9"/>
+  <text x="805" y="345" fill="#f3f6f5" font-family="Arial, sans-serif" font-size="26">MNA / transient solver</text>
+  <text x="805" y="390" fill="#f3f6f5" font-family="Arial, sans-serif" font-size="26">Arduino interpreter</text>
+  <text x="805" y="435" fill="#f3f6f5" font-family="Arial, sans-serif" font-size="26">80 documented tests</text>
+  <circle cx="1135" cy="95" r="15" fill="#39d9c2"/><text x="810" y="680" fill="#9eb1bf" font-family="monospace" font-size="20">SIMULATION STATUS: RUNNING</text>
+</svg>
