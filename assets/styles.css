@@ -63,6 +63,10 @@ a:focus-visible{outline:3px solid var(--stamp);outline-offset:4px}
 .skip{position:absolute;left:-9999px;top:0;z-index:20;padding:12px 18px;background:var(--ink);color:#fff;font-weight:600}
 .skip:focus{left:12px;top:12px}
 .hero-name{margin:22px 0 6px;font-size:.78rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+.fit-strip{display:grid;grid-template-columns:1fr 1fr;gap:1px;margin-top:24px;border:1px solid var(--line);background:var(--line)}
+.fit-strip p{margin:0;padding:14px 16px;background:rgba(255,255,255,.72)}
+.fit-strip small{display:block;margin-bottom:5px;color:var(--stamp);font-size:.62rem;text-transform:uppercase;letter-spacing:.08em}
+.fit-strip b{font-size:.82rem;line-height:1.35}
 .hero h1{margin-bottom:18px}
 .hero .actions{flex-wrap:wrap;margin-top:28px}
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 0;padding:0;list-style:none}
@@ -129,4 +133,4 @@ a:focus-visible{outline:3px solid var(--stamp);outline-offset:4px}
    headline overflowed the viewport and dragged the whole page sideways */
 .hero h1{overflow-wrap:break-word}
 @media(max-width:700px){.hero h1{font-size:clamp(2.4rem,10.5vw,3.6rem)}.hero .actions .button{flex:1 1 auto;justify-content:center}.chips li{font-size:.66rem}}
-@media(max-width:600px){.overview{grid-template-columns:1fr}.overview>div{border-right:0;border-bottom:1px solid var(--line);padding:20px 0}.overview>div:last-child{border-bottom:0}.experience{padding:70px 0}.process-grid.five{grid-template-columns:1fr}.diagram{padding:16px 0}.featured-img{box-shadow:8px 8px 0 var(--mint)}}
+@media(max-width:600px){.overview{grid-template-columns:1fr}.overview>div{border-right:0;border-bottom:1px solid var(--line);padding:20px 0}.overview>div:last-child{border-bottom:0}.experience{padding:70px 0}.process-grid.five{grid-template-columns:1fr}.diagram{padding:16px 0}.featured-img{box-shadow:8px 8px 0 var(--mint)}.fit-strip{grid-template-columns:1fr}}
