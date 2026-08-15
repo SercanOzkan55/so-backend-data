@@ -1,5 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=IBM+Plex+Mono&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
-:root{--paper:#f3f6f5;--ink:#12181b;--signal:#1f6f63;--stamp:#b5502e;--muted:#596366;--line:#c6cfcb;--soft:#e5ebe8}*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans',sans-serif}a{color:inherit;text-decoration:none}img{display:block;max-width:100%}.shell{width:min(1160px,calc(100% - 48px));margin:auto}.mono,.eyebrow,.kicker,small{font-family:'IBM Plex Mono',monospace}.site-header{width:min(1280px,calc(100% - 48px));height:92px;margin:auto;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:12px}.brand span{width:42px;height:42px;display:grid;place-items:center;background:var(--ink);color:white;font-family:Fraunces,serif}.site-header nav{display:flex;gap:42px;font-weight:600}.hero{min-height:680px;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:70px;padding:70px 0}.hero h1,.intro h1,.contact h1,.case-hero h1{font:600 clamp(3.5rem,7vw,7rem)/.94 Fraunces,serif;letter-spacing:-.055em;margin:0}.kicker,.eyebrow{color:var(--signal);font-size:.72rem;letter-spacing:.09em;text-transform:uppercase}.lede{font-size:1.2rem;line-height:1.65;color:var(--muted)}.hero>img{min-height:450px;object-fit:cover;border:1px solid var(--stamp)}.actions{display:flex;gap:12px;margin-top:32px}.button{display:inline-flex;padding:15px 22px;border:1px solid var(--ink);font-weight:600}.button.dark{background:var(--ink);color:white}.button.light{background:white}.metrics{display:grid;grid-template-columns:repeat(4,1fr);border-block:1px solid var(--line)}.metrics div{padding:38px 15px;text-align:center;border-right:1px solid var(--line)}.metrics div:last-child{border:0}.metrics b{display:block;font:600 2rem Fraunces,serif;color:var(--stamp)}.metrics span{font:.68rem 'IBM Plex Mono';text-transform:uppercase;color:var(--muted)}.section{padding:110px 0}.display{font:600 clamp(2.6rem,5vw,4.6rem)/1 Fraunces,serif;max-width:760px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:50px}.grid.two{grid-template-columns:repeat(2,1fr);gap:60px 32px}.card-img{display:block;aspect-ratio:16/10;overflow:hidden;border:1px solid var(--line);background:var(--soft)}.card-img img{width:100%;height:100%;object-fit:cover}.card .stamp{color:var(--stamp);font-size:.7rem;margin-top:20px}.card h2{font:600 2rem/1.05 Fraunces,serif;margin:10px 0}.card>p:not(.stamp){color:var(--muted);line-height:1.6}.tags{display:flex;flex-wrap:wrap;gap:7px;padding:0;list-style:none}.tags li{background:var(--soft);padding:6px 9px;font:.66rem 'IBM Plex Mono'}.text-link{display:inline-block;border-bottom:1px solid;margin-top:12px;font-weight:600}.cta{margin-bottom:110px;padding:70px;background:var(--signal);color:white}.cta .eyebrow{color:white}.cta h2{font:600 clamp(2.5rem,5vw,4.5rem)/1 Fraunces,serif;max-width:750px}.intro{padding:100px 0 75px;border-bottom:1px solid var(--line)}.intro>p:last-child{max-width:740px;color:var(--muted);font-size:1.18rem;line-height:1.65}.about{display:grid;grid-template-columns:1.2fr .8fr;gap:60px;align-items:center}.about-body{display:grid;grid-template-columns:1.35fr .8fr;gap:100px;padding:90px 0 120px}.about-body p{color:var(--muted);line-height:1.75}.about-body .big{font:600 2.4rem/1.25 Fraunces,serif;color:var(--ink)}.about-body aside{background:var(--soft);padding:30px;border-top:4px solid var(--stamp)}.about-body li{margin-bottom:16px;line-height:1.5}.contact{min-height:650px;padding:100px 0}.contact>p:not(.eyebrow){max-width:700px;color:var(--muted);font-size:1.2rem;line-height:1.65}.contact-links{margin-top:50px;border-top:1px solid}.contact-links a{display:grid;grid-template-columns:100px 1fr auto;gap:20px;padding:26px 0;border-bottom:1px solid var(--line)}.contact-links small{color:var(--stamp)}.case-hero{padding:65px 0}.back{display:inline-block;margin-bottom:55px;color:var(--muted);font-size:.72rem}.case-hero .button{margin-top:12px}.proof{margin-bottom:90px}.proof img{width:100%;max-height:690px;object-fit:contain;background:#101517;border:1px solid var(--line)}.proof figcaption{display:grid;grid-template-columns:120px 1fr;gap:20px;padding:20px 0;border-bottom:1px solid var(--line);color:var(--muted)}.proof figcaption span{color:var(--stamp)}.case-body{display:grid;grid-template-columns:210px 1fr;gap:120px;padding-bottom:110px}.case-body>div{max-width:760px}.case-body section{margin-bottom:75px}.case-body h2{font:600 clamp(2.3rem,4vw,4rem)/1 Fraunces,serif;margin:0 0 20px}.case-body p,.case-body li{color:var(--muted);font-size:1.08rem;line-height:1.7}.case-body li{padding:15px 0;border-top:1px solid var(--line)}.limit{background:#f1e7e1;border-left:4px solid var(--stamp);padding:30px}.next{padding:45px 0 100px;border-top:1px solid}.next a{display:flex;justify-content:space-between;font:600 clamp(2.5rem,6vw,6rem)/1 Fraunces,serif}.next b{color:var(--stamp)}.site-footer{width:min(1280px,calc(100% - 48px));margin:auto;display:grid;grid-template-columns:1fr auto auto;gap:45px;padding:45px 0;border-top:1px solid var(--line);color:var(--muted)}.site-footer small{color:var(--signal)}.site-footer div:nth-child(2){display:flex;gap:25px;color:var(--ink);font-weight:600}
+:root{--paper:#f3f6f5;--ink:#12181b;--signal:#1f6f63;--stamp:#b5502e;--muted:#596366;--line:#c6cfcb;--soft:#e5ebe8}*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans',sans-serif}a{color:inherit;text-decoration:none}img{display:block;max-width:100%}.shell{width:min(1160px,calc(100% - 48px));margin:auto}.mono,.eyebrow,.kicker,small{font-family:'IBM Plex Mono',monospace}.site-header{width:min(1280px,calc(100% - 48px));height:92px;margin:auto;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:12px}.brand span{width:42px;height:42px;display:grid;place-items:center;background:var(--ink);color:white;font-family:Fraunces,serif}.site-header nav{display:flex;gap:42px;font-weight:600}.hero{min-height:680px;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:70px;padding:70px 0}.hero h1,.intro h1,.contact h1,.case-hero h1{font:600 clamp(3.5rem,7vw,7rem)/.94 Fraunces,serif;letter-spacing:-.055em;margin:0}.kicker,.eyebrow{color:var(--signal);font-size:.72rem;letter-spacing:.09em;text-transform:uppercase}.lede{font-size:1.2rem;line-height:1.65;color:var(--muted)}.hero>img{min-height:450px;object-fit:cover;border:1px solid var(--stamp)}.actions{display:flex;gap:12px;margin-top:32px}.button{display:inline-flex;padding:15px 22px;border:1px solid var(--ink);font-weight:600}.button.dark{background:var(--ink);color:white}.button.light{background:white}.metrics{display:grid;grid-template-columns:repeat(4,1fr);border-block:1px solid var(--line)}.metrics div{padding:38px 15px;text-align:center;border-right:1px solid var(--line)}.metrics div:last-child{border:0}.metrics b{display:block;font:600 2rem Fraunces,serif;color:var(--stamp)}.metrics span{font:.68rem 'IBM Plex Mono',monospace;text-transform:uppercase;color:var(--muted)}.section{padding:110px 0}.display{font:600 clamp(2.6rem,5vw,4.6rem)/1 Fraunces,serif;max-width:760px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:50px}.grid.two{grid-template-columns:repeat(2,1fr);gap:60px 32px}.card-img{display:block;aspect-ratio:16/10;overflow:hidden;border:1px solid var(--line);background:var(--soft)}.card-img img{width:100%;height:100%;object-fit:cover}.card .stamp{color:var(--stamp);font-size:.7rem;margin-top:20px}.card h2{font:600 2rem/1.05 Fraunces,serif;margin:10px 0}.card>p:not(.stamp){color:var(--muted);line-height:1.6}.tags{display:flex;flex-wrap:wrap;gap:7px;padding:0;list-style:none}.tags li{background:var(--soft);padding:6px 9px;font:.66rem 'IBM Plex Mono',monospace}.text-link{display:inline-block;border-bottom:1px solid;margin-top:12px;font-weight:600}.cta{margin-bottom:110px;padding:70px;background:var(--signal);color:white}.cta .eyebrow{color:white}.cta h2{font:600 clamp(2.5rem,5vw,4.5rem)/1 Fraunces,serif;max-width:750px}.intro{padding:100px 0 75px;border-bottom:1px solid var(--line)}.intro>p:last-child{max-width:740px;color:var(--muted);font-size:1.18rem;line-height:1.65}.about{display:grid;grid-template-columns:1.2fr .8fr;gap:60px;align-items:center}.about-body{display:grid;grid-template-columns:1.35fr .8fr;gap:100px;padding:90px 0 120px}.about-body p{color:var(--muted);line-height:1.75}.about-body .big{font:600 2.4rem/1.25 Fraunces,serif;color:var(--ink)}.about-body aside{background:var(--soft);padding:30px;border-top:4px solid var(--stamp)}.about-body li{margin-bottom:16px;line-height:1.5}.contact{min-height:650px;padding:100px 0}.contact>p:not(.eyebrow){max-width:700px;color:var(--muted);font-size:1.2rem;line-height:1.65}.contact-links{margin-top:50px;border-top:1px solid}.contact-links a{display:grid;grid-template-columns:100px 1fr auto;gap:20px;padding:26px 0;border-bottom:1px solid var(--line)}.contact-links small{color:var(--stamp)}.case-hero{padding:65px 0}.back{display:inline-block;margin-bottom:55px;color:var(--muted);font-size:.72rem}.case-hero .button{margin-top:12px}.proof{margin-bottom:90px}.proof img{width:100%;max-height:690px;object-fit:contain;background:#101517;border:1px solid var(--line)}.proof figcaption{display:grid;grid-template-columns:120px 1fr;gap:20px;padding:20px 0;border-bottom:1px solid var(--line);color:var(--muted)}.proof figcaption span{color:var(--stamp)}.case-body{display:grid;grid-template-columns:210px 1fr;gap:120px;padding-bottom:110px}.case-body>div{max-width:760px}.case-body section{margin-bottom:75px}.case-body h2{font:600 clamp(2.3rem,4vw,4rem)/1 Fraunces,serif;margin:0 0 20px}.case-body p,.case-body li{color:var(--muted);font-size:1.08rem;line-height:1.7}.case-body li{padding:15px 0;border-top:1px solid var(--line)}.limit{background:#f1e7e1;border-left:4px solid var(--stamp);padding:30px}.next{padding:45px 0 100px;border-top:1px solid var(--line)}.next a{display:flex;justify-content:space-between;font:600 clamp(2.5rem,6vw,6rem)/1 Fraunces,serif}.next b{color:var(--stamp)}.site-footer{width:min(1280px,calc(100% - 48px));margin:auto;display:grid;grid-template-columns:1fr auto auto;gap:45px;padding:45px 0;border-top:1px solid var(--line);color:var(--muted)}.site-footer small{color:var(--signal)}.site-footer div:nth-child(2){display:flex;gap:25px;color:var(--ink);font-weight:600}
 @media(max-width:850px){.hero,.about,.about-body{grid-template-columns:1fr}.grid{grid-template-columns:1fr 1fr}.case-body{grid-template-columns:1fr;gap:35px}.site-footer{grid-template-columns:1fr auto}.metrics{grid-template-columns:1fr 1fr}}
 @media(max-width:600px){.shell,.site-header,.site-footer{width:calc(100% - 32px)}.site-header{height:76px}.brand b{display:none}.site-header nav{gap:16px;font-size:.83rem}.hero{grid-template-columns:1fr;min-height:auto;padding:55px 0}.hero h1,.intro h1,.contact h1,.case-hero h1{font-size:clamp(3.2rem,15vw,5rem)}.hero>img{min-height:290px}.grid,.grid.two{grid-template-columns:1fr}.section{padding:75px 0}.cta{width:100%;padding:55px 24px}.intro{padding:70px 0 55px}.about-body{padding:65px 0 85px}.proof figcaption{grid-template-columns:1fr}.contact-links a{grid-template-columns:1fr auto}.contact-links small{grid-column:1/-1}.site-footer{grid-template-columns:1fr}.metrics div:nth-child(2){border-right:0}}
 
@@ -20,17 +19,17 @@ a:focus-visible{outline:3px solid var(--stamp);outline-offset:4px}
 .kicker span{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--signal);box-shadow:0 0 0 6px rgba(8,127,109,.12);margin-right:9px}
 .button{transition:transform .2s,box-shadow .2s,background .2s}
 .button:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--stamp)}
-.hero-links{display:flex;flex-wrap:wrap;gap:24px;margin-top:35px;font:.72rem 'IBM Plex Mono';text-transform:uppercase}
+.hero-links{display:flex;flex-wrap:wrap;gap:24px;margin-top:35px;font:.72rem 'IBM Plex Mono',monospace;text-transform:uppercase}
 .hero-links a{border-bottom:1px solid var(--line);padding-bottom:4px}
 .hero-panel{background:var(--night);color:white;padding:18px;box-shadow:18px 18px 0 var(--mint);transform:rotate(1deg)}
-.panel-head,.panel-foot{display:flex;justify-content:space-between;gap:16px;padding:5px 2px 16px;font:.65rem 'IBM Plex Mono';text-transform:uppercase;color:#a9bbb8}
+.panel-head,.panel-foot{display:flex;justify-content:space-between;gap:16px;padding:5px 2px 16px;font:.65rem 'IBM Plex Mono',monospace;text-transform:uppercase;color:#a9bbb8}
 .panel-head b,.panel-foot b{color:white}
 .panel-feature{display:block;background:#f0f2ec;color:var(--ink);padding:32px;margin-bottom:12px;transition:transform .2s}
 .panel-feature:hover,.panel-grid a:hover{transform:translateY(-3px)}
 .hero-panel small{display:block;color:var(--stamp);font-size:.62rem;letter-spacing:.08em}
 .hero-panel strong{display:block;font:600 2.4rem Fraunces,serif;margin:12px 0}
 .panel-feature p{color:var(--muted);line-height:1.5}
-.panel-feature>span,.panel-grid span{font:.64rem 'IBM Plex Mono';color:var(--signal)}
+.panel-feature>span,.panel-grid span{font:.64rem 'IBM Plex Mono',monospace;color:var(--signal)}
 .panel-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .panel-grid a{min-height:145px;padding:22px;background:#203335;transition:transform .2s}
 .panel-grid a:last-child{background:var(--signal)}
@@ -41,7 +40,7 @@ a:focus-visible{outline:3px solid var(--stamp);outline-offset:4px}
 .metrics{background:rgba(255,255,255,.48)}
 .expertise{display:grid;grid-template-columns:190px 1fr;gap:42px;align-items:start;padding:65px 0;border-bottom:1px solid var(--line)}
 .expertise>div{display:flex;flex-wrap:wrap;gap:10px}
-.expertise span{padding:11px 15px;border:1px solid var(--line);background:rgba(255,255,255,.45);font:.75rem 'IBM Plex Mono';text-transform:uppercase}
+.expertise span{padding:11px 15px;border:1px solid var(--line);background:rgba(255,255,255,.45);font:.75rem 'IBM Plex Mono',monospace;text-transform:uppercase}
 .card{position:relative}
 .card-img{box-shadow:0 0 0 transparent;transition:transform .25s,box-shadow .25s}
 .card:hover .card-img{transform:translateY(-5px);box-shadow:9px 9px 0 var(--mint)}
@@ -70,7 +69,7 @@ a:focus-visible{outline:3px solid var(--stamp);outline-offset:4px}
 .hero h1{margin-bottom:18px}
 .hero .actions{flex-wrap:wrap;margin-top:28px}
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 0;padding:0;list-style:none}
-.chips li{padding:7px 12px;border:1px solid var(--line);background:rgba(255,255,255,.6);font:.7rem 'IBM Plex Mono';text-transform:uppercase;letter-spacing:.04em}
+.chips li{padding:7px 12px;border:1px solid var(--line);background:rgba(255,255,255,.6);font:.7rem 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.04em}
 .chips.wide li{background:transparent;border-color:var(--signal);color:var(--signal)}
 .metrics b{font-size:2.4rem}
 .metrics-note{margin:18px auto 0;font-size:.7rem;color:var(--muted);text-align:center;line-height:1.6}
@@ -84,7 +83,7 @@ a:focus-visible{outline:3px solid var(--stamp);outline-offset:4px}
 .featured .actions{flex-wrap:wrap;margin-top:26px}
 .card-line{font:600 1.15rem/1.35 Fraunces,serif;color:var(--ink);margin:6px 0 0}
 .card-role{margin:14px 0 0;font-size:.92rem;line-height:1.6;color:var(--muted)}
-.card-role b{display:block;font:.66rem 'IBM Plex Mono';text-transform:uppercase;letter-spacing:.08em;color:var(--stamp);margin-bottom:3px}
+.card-role b{display:block;font:.66rem 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.08em;color:var(--stamp);margin-bottom:3px}
 .card .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
 .card .button{padding:11px 16px;font-size:.85rem}
 .button.muted{border-style:dashed;color:var(--muted);cursor:default}
@@ -118,9 +117,9 @@ a:focus-visible{outline:3px solid var(--stamp);outline-offset:4px}
 .dg-node.dg-primary .dg-sub{fill:#a9bbb8}
 .dg-node.dg-accent rect{fill:var(--mint);stroke:var(--signal)}
 .dg-label{font:600 14px 'IBM Plex Sans';fill:var(--ink);text-anchor:middle}
-.dg-sub{font:11px 'IBM Plex Mono';fill:var(--muted);text-anchor:middle}
-.dg-tier{font:11px 'IBM Plex Mono';fill:var(--stamp);letter-spacing:.1em}
-.dg-note{font:11px 'IBM Plex Mono';fill:var(--muted)}
+.dg-sub{font:11px 'IBM Plex Mono',monospace;fill:var(--muted);text-anchor:middle}
+.dg-tier{font:11px 'IBM Plex Mono',monospace;fill:var(--stamp);letter-spacing:.1em}
+.dg-note{font:11px 'IBM Plex Mono',monospace;fill:var(--muted)}
 .dg-arrow{stroke:var(--signal);stroke-width:1.5;fill:none}
 .dg-headfill{fill:var(--signal)}
 .case-hero .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
@@ -144,4 +143,142 @@ a:focus-visible{outline:3px solid var(--stamp);outline-offset:4px}
   .lede{font-size:1.08rem;line-height:1.7}
   .card h2{font-size:1.7rem}
   .text-link{min-height:44px;display:inline-flex;align-items:center}
+}
+
+/* ==================================================================
+   Motion & interaction layer
+   Timing follows the ui-ux-pro-max motion table: a deceleration curve
+   for entrances, a softer one for micro-feedback, and three duration
+   tokens sized by how far the element actually travels — rather than
+   one duration copied onto every transition.
+   Everything here is transform/opacity only, so it stays on the
+   compositor, and the whole layer switches off under reduced motion.
+   ================================================================== */
+
+:root{
+  color-scheme:light;
+  --ease-out:cubic-bezier(.215,.61,.355,1);  /* entrances            */
+  --ease-soft:cubic-bezier(.25,.46,.45,.94); /* hover / press        */
+  --dur-micro:160ms;                          /* press feedback       */
+  --dur-ui:280ms;                             /* state changes        */
+  --dur-reveal:520ms;                         /* scroll entrances     */
+  --header-h:92px;
+}
+/* the rotated hero panel and its offset shadows must never widen the page */
+body{overflow-x:clip}
+
+/* ---- sticky header ------------------------------------------------ */
+/* full-bleed bar so the page does not show through the 24px gutters
+   either side of the inset header row */
+.header-bar{position:sticky;top:0;z-index:30;background:var(--paper)}
+@supports (backdrop-filter:blur(1px)){
+  .header-bar{background:color-mix(in srgb,var(--paper) 82%,transparent);backdrop-filter:blur(12px) saturate(1.4);-webkit-backdrop-filter:blur(12px) saturate(1.4)}
+}
+.site-header{position:relative}
+/* the scrolled state changes paint only — no height transition, so crossing
+   the threshold never relays out the header on a scroll frame */
+.header-bar{transition:box-shadow var(--dur-ui) var(--ease-out),background var(--dur-ui) var(--ease-out)}
+.header-bar.is-stuck{box-shadow:0 1px 0 var(--line),0 10px 30px -22px rgba(16,23,25,.5)}
+.header-bar.is-stuck .site-header{border-bottom-color:transparent}
+/* WCAG 2.2 "focus not obscured": anchor targets clear the sticky bar */
+html{scroll-padding-top:calc(var(--header-h) + 18px)}
+.skip{z-index:40}
+
+/* scroll progress — pure CSS scroll timeline, absent where unsupported */
+.scroll-progress{display:none}
+@supports (animation-timeline:scroll()){
+  .js-motion .scroll-progress{display:block;position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--stamp);transform:scaleX(0);transform-origin:0 50%;animation:sp-grow linear both;animation-timeline:scroll(root block)}
+}
+@keyframes sp-grow{to{transform:scaleX(1)}}
+
+/* ---- hero entrance ------------------------------------------------ */
+/* the one composed animation on the page (rule: 1-2 animated elements
+   per view), staggered so the eye lands on the headline first */
+@keyframes rise{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+@keyframes rise-panel{from{opacity:0;transform:translateY(30px) rotate(1deg) scale(.985)}to{opacity:1;transform:rotate(1deg)}}
+@keyframes rise-flat{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+.js-motion .hero-copy>*{animation:rise var(--dur-reveal) var(--ease-out) both}
+.js-motion .hero-copy>*:nth-child(1){animation-delay:40ms}
+.js-motion .hero-copy>*:nth-child(2){animation-delay:90ms}
+.js-motion .hero-copy>*:nth-child(3){animation-delay:140ms}
+.js-motion .hero-copy>*:nth-child(4){animation-delay:200ms}
+.js-motion .hero-copy>*:nth-child(5){animation-delay:260ms}
+.js-motion .hero-copy>*:nth-child(6){animation-delay:310ms}
+.js-motion .hero-copy>*:nth-child(7){animation-delay:360ms}
+.js-motion .hero-panel{animation:rise-panel 700ms var(--ease-out) both;animation-delay:180ms}
+/* the same entrance for the inner-page headers, so Work/About/Contact and
+   the case studies do not sit dead while the home page moves */
+.js-motion :is(.intro,.contact,.case-hero)>*{animation:rise var(--dur-reveal) var(--ease-out) both}
+.js-motion :is(.intro,.contact,.case-hero)>*:nth-child(1){animation-delay:40ms}
+.js-motion :is(.intro,.contact,.case-hero)>*:nth-child(2){animation-delay:100ms}
+.js-motion :is(.intro,.contact,.case-hero)>*:nth-child(3){animation-delay:160ms}
+.js-motion :is(.intro,.contact,.case-hero)>*:nth-child(4){animation-delay:220ms}
+.js-motion :is(.intro,.contact,.case-hero)>*:nth-child(5){animation-delay:280ms}
+
+/* ---- scroll reveal ------------------------------------------------ */
+/* .js-motion is set before first paint, so with JS off or reduced
+   motion on, none of this applies and the content renders as-is */
+.js-motion [data-reveal]{opacity:0;transform:translateY(22px);transition:opacity var(--dur-reveal) var(--ease-out),transform var(--dur-reveal) var(--ease-out)}
+.js-motion [data-reveal].is-in{opacity:1;transform:none}
+.js-motion [data-reveal-group]>*{opacity:0;transform:translateY(18px);transition:opacity var(--dur-reveal) var(--ease-out),transform var(--dur-reveal) var(--ease-out);transition-delay:calc(var(--i,0) * 70ms)}
+.js-motion [data-reveal-group].is-in>*{opacity:1;transform:none}
+
+/* ---- micro-interactions ------------------------------------------- */
+/* nav underline: scaleX instead of animating width, so the browser
+   never has to lay the pseudo-element out again mid-transition */
+.site-header nav a:not(.nav-cv):after{width:100%;transform:scaleX(0);transform-origin:0 50%;transition:transform var(--dur-ui) var(--ease-out)}
+.site-header nav a:hover:after{width:100%;transform:scaleX(1)}
+.site-header nav a:focus-visible:after{transform:scaleX(1)}
+
+.button{transition:transform var(--dur-micro) var(--ease-soft),box-shadow var(--dur-micro) var(--ease-soft),background var(--dur-micro) var(--ease-soft)}
+.button:active{transform:translate(0,0);box-shadow:0 0 0 var(--stamp)}
+.featured-img{transition:transform var(--dur-ui) var(--ease-out),box-shadow var(--dur-ui) var(--ease-out)}
+.contact-links a{transition:background var(--dur-micro) var(--ease-soft)}
+.contact-links a span{display:inline-block;transition:transform var(--dur-ui) var(--ease-out)}
+.next b{display:inline-block;transition:transform var(--dur-ui) var(--ease-out)}
+.chips li,.expertise span{transition:border-color var(--dur-micro) var(--ease-soft),color var(--dur-micro) var(--ease-soft)}
+
+@media (hover:hover){
+  .featured-img:hover{transform:translateY(-4px);box-shadow:18px 18px 0 var(--mint)}
+  .contact-links a:hover{background:rgba(255,255,255,.55)}
+  .contact-links a:hover span{transform:translate(4px,-4px)}
+  .next a:hover b{transform:translateX(12px)}
+  .chips li:hover,.expertise span:hover{border-color:var(--signal);color:var(--signal)}
+}
+/* hover states stick on touch after a tap — neutralise them there */
+@media (hover:none){
+  .button:hover,.button.light:hover,.featured-img:hover,.panel-feature:hover,.panel-grid a:hover,.card:hover .card-img{transform:none}
+  .button:hover,.button.light:hover{box-shadow:none}
+  .card:hover .card-img{box-shadow:0 0 0 transparent}
+}
+
+/* ---- focus ---------------------------------------------------------
+   the earlier layer only covered <a>, leaving every other focusable
+   element on the browser default ring */
+a:focus-visible,button:focus-visible,[tabindex]:focus-visible,summary:focus-visible{outline:3px solid var(--stamp);outline-offset:4px}
+
+/* ---- mobile navigation ---------------------------------------------
+   the previous pass hid "Experience" and the CV link outright on
+   phones. The nav scrolls inside itself instead, so every destination
+   survives and the page still never scrolls sideways. */
+@media(max-width:600px){
+  :root{--header-h:76px}
+  .site-header{gap:8px}
+  .site-header nav{flex:1;justify-content:flex-end;gap:9px;font-size:.71rem;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .site-header nav::-webkit-scrollbar{display:none}
+  .site-header nav a{flex:0 0 auto}
+  .site-header nav a:nth-child(2){display:inline-flex}
+  .nav-cv{display:inline-flex;padding:7px 9px}
+  .js-motion .hero-panel{animation-name:rise-flat}
+}
+
+/* ---- reduced motion -------------------------------------------------
+   .js-motion is never set when the preference is on, so the rules above
+   never attach. This is the safety net for a preference flipped after
+   load, plus the transitions defined in the earlier layers. */
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important;scroll-behavior:auto !important}
+  [data-reveal],[data-reveal-group]>*{opacity:1 !important;transform:none !important}
+  .scroll-progress{display:none}
 }
