@@ -2,7 +2,7 @@ import { mkdir, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 
 const root = new URL(".", import.meta.url).pathname.replace(/^\/(?:[A-Za-z]:)/, (m) => m.slice(1));
-const base = "/so-backend-data";
+const base = "/Portfolio";
 const site = `https://sercanozkan55.github.io${base}`;
 const repo = "https://github.com/SercanOzkan55";
 const linkedin = "https://www.linkedin.com/in/sercan-%C3%B6zkan-a205852a7/";
