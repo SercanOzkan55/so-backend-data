@@ -1,0 +1,21 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "portfolio-contact-api",
+  "main": "src/index.js",
+  "compatibility_date": "2026-08-15",
+  "observability": { "enabled": true },
+
+  // Plain configuration values. The Resend API key is NOT here — it is an
+  // encrypted secret set with `wrangler secret put RESEND_API_KEY`.
+  "vars": {
+    "CONTACT_TO": "ozkansercan55@gmail.com",
+    "CONTACT_FROM": "Portfolio Contact <onboarding@resend.dev>",
+    "ALLOWED_ORIGINS": "https://sercanozkan55.github.io,http://localhost:8080,http://127.0.0.1:8080"
+  },
+
+  // Per-IP submission counter. Replace the id with the one printed by
+  // `npx wrangler kv namespace create RATE_LIMIT_KV` before the first deploy.
+  "kv_namespaces": [
+    { "binding": "RATE_LIMIT_KV", "id": "a86fbdc8df4d4959ab4d00255dfd6159" }
+  ]
+}

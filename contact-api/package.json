@@ -1,0 +1,15 @@
+{
+  "name": "portfolio-contact-api",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Contact form endpoint for the portfolio: validates a submission and sends it on as email.",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "test": "node --test \"test/*.test.js\""
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  }
+}

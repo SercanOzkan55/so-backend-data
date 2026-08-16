@@ -1,6 +1,14 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 
+/* ==================================================================== *
+ * Sercan Özkan — portfolio build
+ *
+ * One Node script writes every page from the data below. There is no
+ * framework and no dependency: the site is nine static files, and the
+ * only thing on it that talks to a server is the contact form.
+ * ==================================================================== */
+
 const root = new URL(".", import.meta.url).pathname.replace(/^\/(?:[A-Za-z]:)/, (m) => m.slice(1));
 const base = "/Portfolio";
 const site = `https://sercanozkan55.github.io${base}`;
@@ -8,62 +16,239 @@ const repo = "https://github.com/SercanOzkan55";
 const linkedin = "https://www.linkedin.com/in/sercan-%C3%B6zkan-a205852a7/";
 const cv = `${base}/assets/Sercan_Ozkan_CV_EN.pdf`;
 const email = "ozkansercan55@gmail.com";
-const booking = `mailto:${email}?subject=Portfolio%20conversation%20request`;
 
-// Fonts moved out of the stylesheet: an @import inside styles.css blocks the
-// first paint until Google Fonts answers. A preconnected <link> in <head>
-// lets both requests fly in parallel.
+// The contact form posts here. The endpoint is a Cloudflare Worker in
+// contact-api/, deployed separately from this static site.
+const contactEndpoint = "https://portfolio-contact-api.portfolio-contact-api.workers.dev/api/contact";
+
+// Fonts load from <head> behind preconnect, never via @import in the
+// stylesheet — an @import would hold the first paint until Google Fonts
+// answered. Two families and a mono, five weights in total.
+const fontsHref = "https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap";
+
+const ground = "#08090b";
+
 // Intrinsic sizes so the browser reserves each image box before the file
-// lands. Without these the hero, cards and proof shots all shift on load.
+// lands. Without these the hero, project media and proof shots all shift.
 const imageDims = {
-  "cv-analyzer.png": [3840, 2160],
-  "siliqon-app.png": [2499, 1309],
+  "cv-analyzer.webp": [2000, 1125],
+  "siliqon-app.webp": [1800, 943],
+  "identity-kit.webp": [900, 1260],
   "vr-teacher-cover.svg": [1200, 750],
-  "identity-kit-light.png": [1000, 1400],
 };
-function imgTag(file, alt, { lazy = true } = {}) {
+
+function imgTag(file, alt, { eager = false } = {}) {
   const [w, h] = imageDims[file] ?? [];
   return `<img src="${base}/assets/images/${file}" alt="${alt}"`
     + (w ? ` width="${w}" height="${h}"` : "")
-    + (lazy ? ` loading="lazy" decoding="async"` : ` decoding="async"`)
+    + (eager ? ` decoding="async" fetchpriority="high"` : ` loading="lazy" decoding="async"`)
     + `>`;
 }
 
-const fontsHref = "https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=IBM+Plex+Mono&family=IBM+Plex+Sans:wght@400;500;600&display=swap";
+const arrow = `<span class="arrow" aria-hidden="true">↗</span>`;
+const arrowRight = `<span class="arrow" aria-hidden="true">→</span>`;
 
-// Reveal styles hang off .js-motion, set before the body paints. No JS, or
-// prefers-reduced-motion, means the class never lands and everything renders
-// in its final state — nothing important is hidden behind an animation.
-const motionFlag = `<script>if(!matchMedia("(prefers-reduced-motion: reduce)").matches)document.documentElement.classList.add("js-motion")</script>`;
+/* ------------------------------------------------------------------ *
+ * Runtime
+ * Everything the pages do at runtime lives here: reveals, the sticky
+ * header, the mobile sheet, parallax, and the contact form. All of it
+ * is progressive — the markup is complete and readable without it.
+ * ------------------------------------------------------------------ */
 
-const motionScript = `<script>(function(){
-if(!document.documentElement.classList.contains("js-motion"))return;
+// Set before the body paints. Reveal rules hang off this class, so with
+// JS off or reduced motion on it never lands and nothing is hidden.
+// `js` gates anything that would leave the page worse if the script never
+// runs — the collapsed mobile menu above all. `js-motion` additionally
+// respects the reduced-motion preference.
+const bootFlag = `<script>document.documentElement.classList.add("js");if(!matchMedia("(prefers-reduced-motion: reduce)").matches)document.documentElement.classList.add("js-motion")</script>`;
+
+const runtime = `<script>(function(){
+var root=document.documentElement;
+var motion=root.classList.contains("js-motion");
+
+/* ---- mobile navigation: a sheet, not a cramped dropdown ---- */
+var bar=document.querySelector(".nav-bar");
+var toggle=document.querySelector(".nav-toggle");
+if(toggle&&bar){
+  var close=function(){document.body.classList.remove("nav-open");toggle.setAttribute("aria-expanded","false")};
+  toggle.addEventListener("click",function(){
+    var open=document.body.classList.toggle("nav-open");
+    toggle.setAttribute("aria-expanded",open?"true":"false");
+  });
+  document.querySelectorAll(".nav-links a").forEach(function(a){a.addEventListener("click",close)});
+  addEventListener("keydown",function(e){if(e.key==="Escape")close()});
+}
+
+/* ---- sticky header state + scroll progress ---- */
+var progress=document.querySelector(".scroll-progress");
+var stuck=false,ticking=false;
+function onScroll(){
+  if(ticking)return;ticking=true;
+  requestAnimationFrame(function(){
+    var y=scrollY;
+    var s=y>16;
+    if(s!==stuck&&bar){stuck=s;bar.classList.toggle("is-stuck",s)}
+    if(progress){
+      var h=document.documentElement.scrollHeight-innerHeight;
+      progress.style.transform="scaleX("+(h>0?Math.min(y/h,1):0)+")";
+    }
+    ticking=false;
+  });
+}
+addEventListener("scroll",onScroll,{passive:true});onScroll();
+
+if(!motion)return;
+
+/* ---- reveals ----
+   Reveal styles hide content until a callback runs, so the callback not
+   running must never be able to swallow the page. IntersectionObserver
+   reports every target once on observe, which makes it its own health
+   check: no report at all means it is throttled or absent, and
+   everything is shown outright. */
 var targets=document.querySelectorAll("[data-reveal],[data-reveal-group]");
-// The abort path drops .js-motion outright rather than adding .is-in: the
-// class is what gates every reveal rule, so removing it restores the plain
-// rendered page in one step, with no transition left to depend on.
-function revealAll(){document.documentElement.classList.remove("js-motion")}
-document.querySelectorAll("[data-reveal-group]").forEach(function(g){Array.prototype.forEach.call(g.children,function(c,i){c.style.setProperty("--i",i)})});
+function revealAll(){root.classList.remove("js-motion")}
+document.querySelectorAll("[data-reveal-group]").forEach(function(g){
+  Array.prototype.forEach.call(g.children,function(c,i){c.style.setProperty("--i",i)});
+});
+document.querySelectorAll(".mask").forEach(function(m,i){m.style.setProperty("--i",i%6)});
 
-// Reveal styles hide content until a callback runs, so the callback not
-// running must never be able to swallow the page. IntersectionObserver
-// reports every target once on observe, which makes it its own health
-// check: no report at all means the observer is throttled or absent
-// (hidden tab, prerender, old engine) and everything is shown outright.
 if(!("IntersectionObserver" in window)){revealAll();return}
 var alive=false;
-var io=new IntersectionObserver(function(entries){alive=true;entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add("is-in");io.unobserve(e.target)}})},{rootMargin:"0px 0px -10% 0px",threshold:.08});
+var io=new IntersectionObserver(function(entries){
+  alive=true;
+  entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add("is-in");io.unobserve(e.target)}});
+},{rootMargin:"0px 0px -8% 0px",threshold:.06});
 Array.prototype.forEach.call(targets,function(el){io.observe(el)});
 setTimeout(function(){if(!alive){io.disconnect();revealAll()}},2500);
 
-var bar=document.querySelector(".header-bar"),stuck=false;
-if(bar)addEventListener("scroll",function(){var s=scrollY>24;if(s!==stuck){stuck=s;bar.classList.toggle("is-stuck",s)}},{passive:true});
+/* ---- diagram arrows draw themselves ---- */
+document.querySelectorAll(".diagram .dg-arrow").forEach(function(line,i){
+  var len=Math.hypot(line.x2.baseVal.value-line.x1.baseVal.value,line.y2.baseVal.value-line.y1.baseVal.value);
+  line.style.setProperty("--len",len.toFixed(1));
+  line.style.setProperty("--i",i);
+});
+
+/* ---- process rail fills as the section is read ---- */
+var rail=document.querySelector(".process");
+if(rail){
+  var fill=rail.querySelector(".process-fill");
+  var steps=rail.querySelectorAll("article");
+  var pio=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(!e.isIntersecting)return;
+      e.target.classList.add("is-lit");
+      var lit=rail.querySelectorAll("article.is-lit").length;
+      if(fill)fill.style.setProperty("--p",(lit/steps.length).toFixed(3));
+    });
+  },{rootMargin:"0px 0px -35% 0px",threshold:.4});
+  steps.forEach(function(s){pio.observe(s)});
+}
+
+/* ---- parallax + magnetic CTA, desktop pointers only ----
+   Both are transform-only and read scroll state inside one rAF, so
+   nothing here forces a synchronous layout. */
+var fine=matchMedia("(hover:hover) and (pointer:fine)").matches;
+if(fine){
+  var layers=document.querySelectorAll(".parallax");
+  if(layers.length){
+    var ptick=false;
+    addEventListener("scroll",function(){
+      if(ptick)return;ptick=true;
+      requestAnimationFrame(function(){
+        layers.forEach(function(el){
+          var r=el.getBoundingClientRect();
+          if(r.bottom<0||r.top>innerHeight)return;
+          var mid=(r.top+r.height/2-innerHeight/2)/innerHeight;
+          el.style.transform="translate3d(0,"+(mid*-22).toFixed(2)+"px,0)";
+        });
+        ptick=false;
+      });
+    },{passive:true});
+  }
+  document.querySelectorAll(".magnetic").forEach(function(el){
+    el.addEventListener("pointermove",function(e){
+      var r=el.getBoundingClientRect();
+      var x=(e.clientX-r.left-r.width/2)/r.width;
+      var y=(e.clientY-r.top-r.height/2)/r.height;
+      el.style.transform="translate("+(x*7).toFixed(2)+"px,"+(y*7).toFixed(2)+"px)";
+    });
+    el.addEventListener("pointerleave",function(){el.style.transform=""});
+  });
+}
+})();</script>`;
+
+// Progressive enhancement: the markup is a plain form, and this turns it
+// into an in-page submit. Anything unexpected — offline, endpoint down,
+// non-JSON answer — ends in a message that still points at my address.
+const contactScript = `<script>(function(){
+var form=document.querySelector(".contact-form");if(!form)return;
+var endpoint=${JSON.stringify(contactEndpoint)};
+var status=form.querySelector(".form-status");
+var button=form.querySelector('button[type="submit"]');
+var buttonLabel=button.querySelector("[data-button-label]");
+var fields=Array.prototype.slice.call(form.querySelectorAll(".field input,.field textarea"));
+function say(text,state){
+  status.textContent=text;
+  form.dataset.state=state||"idle";
+  if(state)status.dataset.state=state;else delete status.dataset.state;
+  button.dataset.state=state||"idle";
+  buttonLabel.textContent=state==="pending"?"Sending…":state==="ok"?"Message sent":state==="error"?"Try again":"Send message";
+}
+function errorText(input){
+  if(input.validity.valueMissing)return input.name==="message"?"Write a short message.":"Enter your "+input.name+".";
+  if(input.validity.typeMismatch)return "Enter a complete email address.";
+  if(input.validity.tooShort)return input.name==="message"?"Use at least 20 characters so I have enough context.":"Use at least 2 characters.";
+  if(input.validity.tooLong)return "That is longer than this field allows.";
+  return input.validationMessage||"Check this field.";
+}
+function setFieldError(input,message){
+  var field=input.closest(".field");
+  var error=field.querySelector(".field-error");
+  field.classList.toggle("field-invalid",Boolean(message));
+  input.setAttribute("aria-invalid",message?"true":"false");
+  error.textContent=message||"";
+}
+function validate(input){var message=input.validity.valid?"":errorText(input);setFieldError(input,message);return !message}
+function clearErrors(){fields.forEach(function(input){setFieldError(input,"")})}
+fields.forEach(function(input){
+  input.addEventListener("blur",function(){validate(input)});
+  input.addEventListener("input",function(){
+    if(input.getAttribute("aria-invalid")==="true")validate(input);
+    if(form.dataset.state==="error")say("","idle");
+  });
+});
+function markBackendInvalid(field){
+  if(!field)return null;
+  var input=form.querySelector('[name="'+field+'"]');
+  if(input)setFieldError(input,"Please check this field.");
+  return input;
+}
+form.addEventListener("submit",function(event){
+  event.preventDefault();
+  var firstInvalid=null;
+  fields.forEach(function(input){if(!validate(input)&&!firstInvalid)firstInvalid=input});
+  if(firstInvalid){say("Check the highlighted fields and try again.","error");firstInvalid.focus();return}
+  clearErrors();
+  var data=new FormData(form);
+  var payload={name:data.get("name"),email:data.get("email"),message:data.get("message"),website:data.get("website")};
+  button.disabled=true;form.setAttribute("aria-busy","true");say("Sending securely through the live backend…","pending");
+  fetch(endpoint,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(payload)})
+    .then(function(res){return res.json().catch(function(){return{ok:false}}).then(function(body){return{status:res.status,body:body}})})
+    .then(function(result){
+      if(result.body&&result.body.ok){form.reset();clearErrors();say("Accepted by the backend and handed to email delivery. I usually reply within a day.","ok");status.focus();return}
+      var invalid=markBackendInvalid(result.body&&result.body.field);
+      say((result.body&&result.body.error)||"That did not send. Please email me at ${email}.","error");
+      if(invalid)invalid.focus();else status.focus();
+    })
+    .catch(function(){say("Network error — nothing was sent. Please email me at ${email}.","error");status.focus()})
+    .then(function(){button.disabled=false;form.removeAttribute("aria-busy")});
+});
 })();</script>`;
 
 /* ------------------------------------------------------------------ *
  * Architecture diagrams
- * Hand-drawn SVG so they inherit the site palette, stay crisp at any
- * width, and need no image assets.
+ * Hand-drawn SVG so they inherit the palette, stay crisp at any width,
+ * and need no image assets.
  * ------------------------------------------------------------------ */
 
 function svgBox(x, y, w, h, label, sub, variant = "") {
@@ -139,17 +324,19 @@ const diagrams = {
 };
 
 /* ------------------------------------------------------------------ *
- * Case studies
+ * Content
+ * Everything below is drawn from real project material. Nothing here is
+ * a placeholder metric or an invented result.
  * ------------------------------------------------------------------ */
 
 const cases = [
   {
     slug: "cv-analyzer", number: "01", title: "CV Analyzer",
-    kind: "AI PRODUCT", featured: true,
+    kind: "AI PRODUCT", featured: true, treatment: "lead",
     strap: "Deterministic where it can be, AI where it must be.",
     oneLine: "AI-powered resume intelligence platform",
     summary: "A hybrid resume-intelligence platform for ATS analysis, recruiter workflows, CV building, and privacy-first local processing.",
-    image: "cv-analyzer.png",
+    image: "cv-analyzer.webp",
     stack: ["Python", "FastAPI", "React", "PostgreSQL", "Redis", "Celery"],
     chips: ["185 endpoints", "900+ tests", "4 runtimes"],
     role: "Solo — backend, web portal, mobile scaffold, desktop worker",
@@ -176,11 +363,11 @@ const cases = [
   },
   {
     slug: "siliqon", number: "02", title: "Siliqon",
-    kind: "SIMULATION",
+    kind: "SIMULATION", treatment: "split",
     strap: "An electronics laboratory that runs entirely in the browser.",
     oneLine: "Browser-based circuit simulation lab",
     summary: "A visual breadboard simulator with real-time analog solving, measurement instruments, guided lessons, deterministic safety warnings, and Arduino-style programming.",
-    image: "siliqon-app.png",
+    image: "siliqon-app.webp",
     stack: ["TypeScript", "React", "PixiJS", "Web Worker", "Supabase", "Vitest"],
     chips: ["295 tests", "40+ components", "6 boards"],
     role: "Solo — simulation engine, interpreter, UI, cloud sync",
@@ -209,7 +396,7 @@ const cases = [
   },
   {
     slug: "vr-teacher", number: "03", title: "VR Teacher",
-    kind: "IMMERSIVE AI",
+    kind: "IMMERSIVE AI", treatment: "story",
     strap: "An AI-supported electronics teacher inside a virtual classroom.",
     oneLine: "AI-powered VR education, grounded in course material",
     summary: "A Unity VR learning environment that explains experiment sheets, answers grounded voice questions, and guides interactive breadboard work.",
@@ -241,11 +428,16 @@ const cases = [
   },
 ];
 
-const metrics = [
-  ["185", "API endpoints"],
-  ["1,190+", "automated tests"],
-  ["12", "CI checks per PR"],
-  ["40+", "simulation components"],
+const featured = cases.find((c) => c.featured);
+
+// The featured readout: every figure below is counted from CV Analyzer's
+// own repository and case study, not estimated.
+const readout = [
+  ["Endpoints", "185", "across 14 routers"],
+  ["Automated tests", "900+", "pytest + Vitest"],
+  ["CI checks per PR", "12", "tests, security, audits"],
+  ["Runtimes", "4", "API, web, mobile, desktop"],
+  ["Commits", "253", "Mar – Jul 2026"],
 ];
 
 const experience = {
@@ -270,15 +462,73 @@ const process = [
   ["05", "Measure", "Record what the system actually does, and say plainly where a number does not exist yet."],
 ];
 
+// Lucide-style 24px stroke icons, inlined. No icon font, no emoji.
+const icons = {
+  build: `<path d="m18 16 4-4-4-4"/><path d="m6 8-4 4 4 4"/><path d="m14.5 4-5 16"/>`,
+  intelligence: `<path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/>`,
+  infrastructure: `<rect width="20" height="8" x="2" y="2" rx="2"/><rect width="20" height="8" x="2" y="14" rx="2"/><path d="M6 6h.01"/><path d="M6 18h.01"/>`,
+  interactive: `<path d="m21 16-9 5-9-5V8l9-5 9 5v8Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/>`,
+};
+
+// Every capability below is backed by a shipped project on this site.
+const capabilities = [
+  ["build", "Build", [
+    ["Web applications", "React · TypeScript · Vite"],
+    ["APIs and services", "FastAPI · REST · JWT auth"],
+    ["Developer tooling", "PySide6 desktop worker · CLI"],
+  ]],
+  ["intelligence", "Intelligence", [
+    ["Retrieval-grounded answering", "ChromaDB · embeddings · citations"],
+    ["LLM behind deterministic gates", "rules first, model as fallback"],
+    ["Evaluation harnesses", "faithfulness · context precision"],
+  ]],
+  ["infrastructure", "Infrastructure", [
+    ["Async workloads", "Celery · Redis queues"],
+    ["Data stores", "PostgreSQL · Supabase"],
+    ["Delivery", "Docker · CI checks · Cloudflare Workers"],
+  ]],
+  ["interactive", "Interactive", [
+    ["Real-time simulation", "MNA solver in a Web Worker"],
+    ["XR clients", "Unity · OpenXR · XR Interaction Toolkit"],
+    ["Scene rendering", "PixiJS · 40+ component models"],
+  ]],
+];
+
 /* ------------------------------------------------------------------ *
- * Layout
+ * Shell
  * ------------------------------------------------------------------ */
 
-function nav() {
-  return `<a class="skip" href="#main">Skip to content</a><div class="header-bar"><header class="site-header"><a class="brand" href="${base}/"><span>SÖ</span><b>Sercan Özkan</b></a><nav aria-label="Primary"><a href="${base}/work/">Work</a><a href="${base}/#experience">Experience</a><a href="${base}/about/">About</a><a href="${base}/contact/">Contact</a><a class="nav-cv" href="${cv}">CV ↗</a></nav><div class="scroll-progress" aria-hidden="true"></div></header></div>`;
+const navItems = [
+  ["Work", `${base}/work/`, "work"],
+  ["Capabilities", `${base}/#capabilities`, "capabilities"],
+  ["About", `${base}/about/`, "about"],
+  ["Contact", `${base}/contact/`, "contact"],
+];
+
+function nav(current) {
+  return `<a class="skip" href="#main">Skip to content</a>` +
+    `<div class="nav-wrap"><div class="nav-bar"><div class="shell"><div class="nav">` +
+      `<a class="brand" href="${base}/"><span class="brand-name">Sercan Özkan</span><span class="brand-role">Backend / Applied AI</span></a>` +
+      `<button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Menu"><span></span><span></span><span></span></button>` +
+      `<nav class="nav-links" id="nav-links" aria-label="Primary">` +
+        navItems.map(([label, href, id]) =>
+          `<a href="${href}"${current === id ? ` aria-current="page"` : ""}>${label}</a>`).join("") +
+        `<a class="nav-cta" href="${base}/contact/">Let&apos;s talk ${arrowRight}</a>` +
+      `</nav>` +
+      `<p class="nav-live"><span class="status-dot" aria-hidden="true"></span>Open to roles</p>` +
+    `</div></div><div class="scroll-progress" aria-hidden="true"></div></div></div>`;
 }
+
 function footer() {
-  return `<footer class="site-footer"><div><small>Backend &amp; applied AI engineering</small><p>Decisions, evidence, and honest limits.</p></div><div><a href="${linkedin}">LinkedIn ↗</a> <a href="${repo}">GitHub ↗</a> <a href="${cv}">CV ↗</a> <a href="${base}/contact/">Contact</a></div><small>© 2026 SÖ</small></footer>`;
+  return `<footer class="site-footer shell">` +
+    `<div class="footer-id"><b>Sercan Özkan</b><span>Backend engineer for AI and data products. Decisions, evidence, and honest limits.</span></div>` +
+    `<nav class="footer-links" aria-label="Footer">` +
+      `<a href="${base}/work/">Work</a><a href="${base}/about/">About</a>` +
+      `<a href="${repo}">GitHub</a><a href="${linkedin}">LinkedIn</a>` +
+      `<a href="mailto:${email}">Email</a><a href="${cv}">CV</a>` +
+    `</nav>` +
+    `<p class="footer-note"><span>© 2026 Sercan Özkan</span><span>Designed and built by me — static site, one live endpoint</span></p>` +
+    `</footer>`;
 }
 
 const personSchema = JSON.stringify({
@@ -293,76 +543,348 @@ const personSchema = JSON.stringify({
   alumniOf: { "@type": "CollegeOrUniversity", name: "Istanbul Health and Technology University" },
 });
 
-function shell(title, description, body, path = "/") {
-  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title} | Sercan Özkan</title><meta name="description" content="${description}"><link rel="canonical" href="${site}${path}"><meta property="og:title" content="${title} | Sercan Özkan"><meta property="og:description" content="${description}"><meta property="og:type" content="website"><meta property="og:url" content="${site}${path}"><meta property="og:image" content="${site}/assets/images/social-preview-v2.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="${site}/assets/images/social-preview-v2.png"><meta name="theme-color" content="#f4f5f1"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="${fontsHref}"><link rel="stylesheet" href="${base}/assets/styles.css"><link rel="icon" href="${base}/assets/favicon.svg"><script type="application/ld+json">${personSchema}</script>${motionFlag}</head><body>${nav()}<main id="main">${body}</main>${footer()}${motionScript}</body></html>`;
+function shell(title, description, body, { path = "/", current = "", scripts = "" } = {}) {
+  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">` +
+    `<title>${title} | Sercan Özkan</title><meta name="description" content="${description}">` +
+    `<link rel="canonical" href="${site}${path}">` +
+    `<meta property="og:title" content="${title} | Sercan Özkan"><meta property="og:description" content="${description}">` +
+    `<meta property="og:type" content="website"><meta property="og:url" content="${site}${path}">` +
+    `<meta property="og:image" content="${site}/assets/images/social-preview.jpg">` +
+    `<meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="${site}/assets/images/social-preview.jpg">` +
+    `<meta name="theme-color" content="${ground}">` +
+    `<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>` +
+    `<link rel="stylesheet" href="${fontsHref}"><link rel="stylesheet" href="${base}/assets/styles.css">` +
+    `<link rel="icon" href="${base}/assets/favicon.svg">` +
+    `<script type="application/ld+json">${personSchema}</script>${bootFlag}</head>` +
+    `<body>${nav(current)}<main id="main">${body}</main>${footer()}${runtime}${scripts}</body></html>`;
 }
 
-function tags(items) { return `<ul class="tags">${items.map(x => `<li>${x}</li>`).join("")}</ul>`; }
-function chips(items) { return `<ul class="chips">${items.map(x => `<li>${x}</li>`).join("")}</ul>`; }
+/* ------------------------------------------------------------------ *
+ * Fragments
+ * ------------------------------------------------------------------ */
 
-function caseLinks(c, { compact = false, onCasePage = false } = {}) {
-  const out = onCasePage
-    ? []
-    : [`<a class="button${compact ? "" : " dark"}" href="${base}/work/${c.slug}/">Case study →</a>`];
-  if (c.liveUrl) out.push(`<a class="button" href="${c.liveUrl}">Live ↗</a>`);
-  if (c.repoUrl) out.push(`<a class="button" href="${c.repoUrl}">GitHub ↗</a>`);
-  if (!c.repoUrl && !c.liveUrl) out.push(`<span class="button muted">Private repository</span>`);
+function chips(items, accent = false) {
+  return `<ul class="chips${accent ? " chips-accent" : ""}">${items.map((x) => `<li>${x}</li>`).join("")}</ul>`;
+}
+function tags(items) {
+  return `<ul class="tags">${items.map((x) => `<li>${x}</li>`).join("")}</ul>`;
+}
+function maskLines(lines) {
+  // The trailing space keeps the lines from concatenating into "anddata"
+  // when the headline is read as one text run.
+  return lines.map((l) => `<span class="mask"><span>${l} </span></span>`).join("");
+}
+function sectionHead(label, heading, note = "") {
+  return `<div class="section-head" data-reveal><p class="label label-accent">${label}</p><h2 class="h2">${heading}</h2>` +
+    (note ? `<p class="head-note">${note}</p>` : "") + `</div>`;
+}
+
+function caseLinks(c, { onCasePage = false } = {}) {
+  const out = onCasePage ? [] : [`<a class="button button-primary" href="${base}/work/${c.slug}/">Read the case study</a>`];
+  if (c.liveUrl) out.push(`<a class="button" href="${c.liveUrl}">Live site ${arrow}</a>`);
+  if (c.repoUrl) out.push(`<a class="button" href="${c.repoUrl}">Source ${arrow}</a>`);
+  if (!c.repoUrl && !c.liveUrl) out.push(`<span class="button button-muted">Private repository</span>`);
   return `<p class="actions">${out.join("")}</p>`;
 }
 
-function card(c) {
-  return `<article class="card"><a class="card-img" href="${base}/work/${c.slug}/">${imgTag(c.image, `Interface capture from ${c.title}`)}</a><p class="mono stamp">Case ${c.number} · ${c.kind}</p><h2><a href="${base}/work/${c.slug}/">${c.title}</a></h2><p class="card-line">${c.oneLine}</p>${chips(c.chips)}<p class="card-role"><b>My role</b> ${c.role}</p><p class="card-role"><b>Key problem</b> ${c.problem}</p>${tags(c.stack)}${caseLinks(c, { compact: true })}</article>`;
+function projectMedia(c, { eager = false } = {}) {
+  return `<a class="project-media" href="${base}/work/${c.slug}/" tabindex="-1" aria-hidden="true">` +
+    imgTag(c.image, "", { eager }) + `</a>`;
 }
 
-const featured = cases.find(c => c.featured);
-const secondary = cases.filter(c => !c.featured);
+function projectFacts(c) {
+  return `<dl class="project-facts">` +
+    `<div><dt>My role</dt><dd>${c.role}</dd></div>` +
+    `<div><dt>Key problem</dt><dd>${c.problem}</dd></div>` +
+    `<div><dt>Status</dt><dd>${c.status} · ${c.activity}</dd></div>` +
+    `</dl>`;
+}
+
+// Three treatments, one design system. The lead project gets cinematic
+// width, the second a split technical read, the third a reversed
+// compact story — so range shows without the page losing its grammar.
+function project(c, { eager = false } = {}) {
+  const head = `<p class="project-index"><span>${c.number}</span><span class="kind">${c.kind}</span><span>${c.stack.slice(0, 3).join(" · ")}</span></p>`;
+
+  if (c.treatment === "lead") {
+    return `<article class="project project-lead" data-reveal>
+  ${head}
+  <div class="parallax project-media-wrap">${projectMedia(c, { eager })}</div>
+  <div class="project-head">
+    <h3><a href="${base}/work/${c.slug}/">${c.title}</a></h3>
+    <p class="project-line">${c.summary}</p>
+    ${caseLinks(c)}
+  </div>
+  <div class="project-side">${chips(c.chips, true)}${projectFacts(c)}</div>
+</article>`;
+  }
+
+  const body = `<div class="project-body">
+    <h3 class="h3"><a href="${base}/work/${c.slug}/">${c.title}</a></h3>
+    <p class="project-line">${c.oneLine} — ${c.strap}</p>
+    ${chips(c.chips, true)}
+    ${projectFacts(c)}
+    ${caseLinks(c)}
+  </div>`;
+
+  return `<article class="project project-${c.treatment}" data-reveal>
+  ${head}
+  ${projectMedia(c)}
+  ${body}
+</article>`;
+}
+
+const contactSection = (heading, copy) => `<div class="contact">
+  <div class="contact-copy" data-reveal>
+    <p class="label label-accent">Contact</p>
+    <h2 class="h2">${heading}</h2>
+    <p class="lede">${copy}</p>
+  </div>
+  <form class="contact-form" data-reveal novalidate data-state="idle">
+    <div class="delivery-route" aria-hidden="true">
+      <span data-route-step="browser"><i></i>Browser</span><b>→</b>
+      <span data-route-step="worker"><i></i>Worker</span><b>→</b>
+      <span data-route-step="inbox"><i></i>Inbox</span>
+    </div>
+    <div class="field">
+      <label for="cf-name">Name</label>
+      <input id="cf-name" name="name" type="text" autocomplete="name" required minlength="2" maxlength="80" aria-describedby="cf-name-error" aria-invalid="false">
+      <p class="field-error" id="cf-name-error"></p>
+    </div>
+    <div class="field">
+      <label for="cf-email">Email</label>
+      <input id="cf-email" name="email" type="email" autocomplete="email" required maxlength="254" aria-describedby="cf-email-error" aria-invalid="false">
+      <p class="field-error" id="cf-email-error"></p>
+    </div>
+    <div class="field">
+      <label for="cf-message">Message</label>
+      <textarea id="cf-message" name="message" rows="6" required minlength="20" maxlength="4000" placeholder="What are you building, and where does the backend hurt?" aria-describedby="cf-message-error" aria-invalid="false"></textarea>
+      <p class="field-error" id="cf-message-error"></p>
+    </div>
+    <div class="field-trap" aria-hidden="true">
+      <label for="cf-website">Leave this field empty</label>
+      <input id="cf-website" name="website" type="text" tabindex="-1" autocomplete="off">
+    </div>
+    <div class="form-foot">
+      <button class="button button-primary magnetic submit-button" type="submit"><span data-button-label>Send message</span><span class="submit-track" aria-hidden="true"></span></button>
+      <p class="form-status" role="status" aria-live="polite" tabindex="-1"></p>
+    </div>
+    <noscript><p class="form-note">This form needs JavaScript to send. Without it, email me at <a class="link" href="mailto:${email}">${email}</a>.</p></noscript>
+  </form>
+  <div class="contact-routes" data-reveal-group>
+    <a href="mailto:${email}"><small>Email</small><b>${email}</b></a>
+    <a href="${linkedin}"><small>Profile</small><b>LinkedIn ${arrow}</b></a>
+    <a href="${repo}"><small>Code</small><b>GitHub ${arrow}</b></a>
+  </div>
+</div>`;
 
 /* ------------------------------------------------------------------ *
- * Pages
+ * Home — one narrative: who, proof, depth, range, method, person, contact
  * ------------------------------------------------------------------ */
 
 const home = shell(
   "Backend Engineer for AI & Data Products",
   "Sercan Özkan — backend and applied AI engineering case studies with architecture, tests and measured results.",
   `
-<section class="hero shell"><div class="hero-copy"><p class="kicker"><span></span> Available for backend and applied AI engineering roles</p><p class="hero-name mono">Sercan Özkan</p><h1>Backend Engineer for AI &amp; Data Products</h1><p class="lede">I build Python/FastAPI backends, data pipelines and retrieval-grounded AI features. My simulation and XR projects show how I handle complex technical systems from architecture to testing.</p><p class="actions"><a class="button dark" href="${base}/work/">View projects</a><a class="button" href="${cv}">Download CV</a><a class="button" href="${repo}">GitHub ↗</a></p><ul class="chips wide"><li>Python</li><li>FastAPI</li><li>PostgreSQL</li><li>React</li><li>TypeScript</li><li>Docker</li><li>RAG / LLM</li></ul><div class="fit-strip"><p><small>Best-fit roles</small><b>Backend Engineer · Applied AI Engineer</b></p><p><small>Problems I solve</small><b>APIs · Data workflows · RAG · Reliability</b></p></div></div><div class="hero-panel" aria-label="Portfolio project overview"><div class="panel-head"><span>Selected systems</span><b>2026 / 03 builds</b></div><a class="panel-feature" href="${base}/work/cv-analyzer/"><small>01 / AI PRODUCT</small><strong>CV Analyzer</strong><p>Resume intelligence with deterministic parsing and explainable scoring.</p><span>FastAPI · React · PostgreSQL</span></a><div class="panel-grid"><a href="${base}/work/siliqon/"><small>02 / SIMULATION</small><strong>Siliqon</strong><span>295 simulation tests</span></a><a href="${base}/work/vr-teacher/"><small>03 / IMMERSIVE AI</small><strong>VR Teacher</strong><span>Unity + grounded RAG</span></a></div><div class="panel-foot"><span><i></i> Portfolio live</span><b>Evidence over mystery</b></div></div></section>
+<section class="hero shell">
+  <div class="hero-top" data-reveal>
+    <p class="status"><span class="status-dot" aria-hidden="true"></span>Available for backend &amp; applied AI roles</p>
+    <p class="label">Istanbul · Türkiye</p>
+  </div>
+  <div data-reveal>
+    <h1 class="display">${maskLines(["Backends for AI and", "data products, built", "to be <em>proven</em>."])}</h1>
+  </div>
+  <p class="lede hero-lede" data-reveal>I design and build Python/FastAPI services, data pipelines and retrieval-grounded AI features — then push the same habits into simulation and XR, where a system cannot be faked into looking like it works.</p>
+  <p class="actions hero-actions" data-reveal>
+    <a class="button button-primary magnetic" href="#work">View selected work</a>
+    <a class="button" href="#contact">Contact me</a>
+    <a class="button button-quiet link" href="${cv}">Download CV ${arrow}</a>
+  </p>
+  <dl class="hero-meta" data-reveal-group>
+    <div><dt>Building across</dt><dd>Web · AI · Cloud · Interactive</dd></div>
+    <div><dt>Primary stack</dt><dd>Python · FastAPI · PostgreSQL · React</dd></div>
+    <div><dt>Evidence</dt><dd>1,190+ automated tests across three systems</dd></div>
+    <div><dt>Currently</dt><dd>Computer engineering student, open to roles</dd></div>
+  </dl>
 
-<section class="metrics" aria-label="Engineering by the numbers" data-reveal-group>${metrics.map(([n, l]) => `<div><b>${n}</b><span>${l}</span></div>`).join("")}</section>
-<p class="metrics-note shell mono" data-reveal>Counted from the three case studies below — endpoints and CI checks from CV Analyzer, tests across all three, components from Siliqon.</p>
+  <figure class="exhibit" data-reveal>
+    <div class="exhibit-head">
+      <p class="label label-accent">Live system · CV Analyzer</p>
+      <h2>Four runtimes over one domain model</h2>
+    </div>
+    <div class="exhibit-figure parallax">${diagrams["cv-analyzer"]}</div>
+    <p class="exhibit-scroll" aria-hidden="true">Scroll the diagram →</p>
+  </figure>
+</section>
 
-<section class="section shell featured" data-reveal><p class="eyebrow">Featured project</p><div class="featured-grid"><a class="featured-img" href="${base}/work/${featured.slug}/">${imgTag(featured.image, "CV Analyzer interface", { lazy: false })}</a><div><h2 class="display">${featured.title}</h2><p class="featured-line">${featured.oneLine}</p><p>${featured.summary}</p>${chips(featured.chips)}<p class="card-role"><b>My role</b> ${featured.role}</p><p class="card-role"><b>Key problem</b> ${featured.problem}</p>${tags(featured.stack)}${caseLinks(featured)}</div></div></section>
+<section class="section ruled shell" id="work">
+  ${sectionHead("Selected work", "Three systems, each with its architecture, its tests, and its limits.", "Every number on this page is counted from the repository it belongs to.")}
+  <div class="work-list">${cases.map((c, i) => project(c, { eager: i === 0 })).join("")}</div>
+</section>
 
-<section class="section shell"><p class="eyebrow" data-reveal>Other selected work</p><h2 class="display" data-reveal>Engineering case studies, from problem to production.</h2><div class="grid two" data-reveal-group>${secondary.map(card).join("")}</div></section>
+<section class="section ruled shell" id="case">
+  ${sectionHead("Featured case study", "CV Analyzer, from a parsing problem to a four-runtime product.")}
+  <div class="study">
+    <div class="study-steps" data-reveal-group>
+      <div class="study-step"><p class="index">01 · Problem</p><h3>Every résumé layout is a different document</h3><p>${featured.problem} Sending each one to a model is accurate enough, but the cost and the variance both scale with the upload count.</p></div>
+      <div class="study-step"><p class="index">02 · Approach</p><h3>Deterministic first, model as fallback</h3><p>A rules-based extraction and normalization pipeline runs first, and a fragmentation quality gate decides whether the parse actually fell apart. Only then does an LLM get paid for.</p></div>
+      <div class="study-step"><p class="index">03 · Build</p><h3>One domain model, four runtimes</h3><p>A FastAPI gateway with JWT auth and plan quotas, a React portal, an Expo mobile client, and a PySide6 desktop worker that keeps sensitive batches on the user's own machine until a sync is asked for.</p></div>
+      <div class="study-step"><p class="index">04 · Decisions</p><h3>Queues instead of request-time work</h3><p>Batch processing is measured in minutes. Celery and Redis take it off the request path, which turns a retry into a queue concern rather than a user-facing failure.</p></div>
+      <div class="study-step"><p class="index">05 · Result</p><h3>A suite that has to pass before anything merges</h3><p>${featured.outcome}</p></div>
+    </div>
+    <figure class="study-figure" data-reveal>
+      <dl class="readout">${readout.map(([k, v, note]) => `<div><dt>${k}</dt><dd><b>${v}</b><span>${note}</span></dd></div>`).join("")}</dl>
+      <figcaption>Counted from the CV Analyzer repository and its case study. Nothing here is estimated.</figcaption>
+    </figure>
+  </div>
+</section>
 
-<section class="experience" id="experience"><div class="shell"><p class="eyebrow">Experience</p><div class="exp-grid" data-reveal><div class="exp-head"><h2 class="display">${experience.role}</h2><p class="exp-org">${experience.org} · ${experience.place}</p><p class="mono exp-period">${experience.period}</p>${tags(experience.tags)}</div><ul class="exp-list" data-reveal-group>${experience.lines.map(l => `<li>${l}</li>`).join("")}</ul></div></div></section>
+<section class="section ruled shell" id="capabilities">
+  ${sectionHead("Capabilities", "What I can be handed on day one.", "Each line below is backed by a project on this site, not by a course.")}
+  <div class="caps" data-reveal-group>
+    ${capabilities.map(([icon, title, items]) => `<article class="cap">
+      <span class="cap-icon" aria-hidden="true"><svg viewBox="0 0 24 24">${icons[icon]}</svg></span>
+      <h3>${title}</h3>
+      <ul>${items.map(([name, detail]) => `<li><b>${name}</b><span>${detail}</span></li>`).join("")}</ul>
+    </article>`).join("")}
+  </div>
+</section>
 
-<section class="process"><div class="shell"><p class="eyebrow">How I engineer</p><h2 class="display">A clear trail from problem to proof.</h2><div class="process-grid five" data-reveal-group>${process.map(([n, h, p]) => `<article><b>${n}</b><h3>${h}</h3><p>${p}</p></article>`).join("")}</div></div></section>
+<section class="section ruled shell" id="process">
+  ${sectionHead("How I build", "Five steps, and the last one is where most portfolios stop.")}
+  <div class="process" data-reveal>
+    <span class="process-fill" aria-hidden="true"></span>
+    ${process.map(([n, h, p]) => `<article><b>${n}</b><h3>${h}</h3><p>${p}</p></article>`).join("")}
+  </div>
+</section>
 
-<section class="cta shell" data-reveal><p class="eyebrow">Next conversation</p><h2>Have a system that needs a careful builder?</h2><p class="actions"><a class="button light" href="${base}/contact/">Let&apos;s talk</a><a class="button light" href="${cv}">Download CV</a></p></section>`);
+<section class="section ruled shell" id="experience">
+  ${sectionHead("Experience", "Low-latency drone video, measured rather than assumed.")}
+  <div class="about" data-reveal>
+    <div class="about-main">
+      <h3 class="h3">${experience.role} — ${experience.org}</h3>
+      <p class="label t-meta">${experience.place} · ${experience.period}</p>
+      <ul class="about-list">${experience.lines.map((l) => `<li>${l}</li>`).join("")}</ul>
+    </div>
+    <div class="about-side"><p class="label">Worked with</p>${tags(experience.tags)}</div>
+  </div>
+</section>
+
+<section class="section ruled shell" id="about">
+  ${sectionHead("About", "I learn complex systems by making their boundaries visible.")}
+  <div class="about">
+    <div class="about-main" data-reveal>
+      <p class="lede">I&apos;m Sercan Özkan, a computer engineering student focused on backend engineering for AI and data-heavy products.</p>
+      <p class="prose t-body">I build APIs, data workflows and grounded AI features, then use simulation and XR projects to push the same engineering habits into harder technical domains. I want to trace how a decision is made, understand where data moves, and know what fails before adding another layer.</p>
+      <p class="prose">AI helps me plan, question, and document the work. I still check the source, run the important paths, record uncertainty, and keep the technical decisions explainable — which is why every case study on this site ends with what is still unfinished.</p>
+      <p class="actions t-actions"><a class="button" href="${base}/about/">More about how I work</a></p>
+    </div>
+    <div class="about-side" data-reveal>
+      <p class="label">Known limits, stated</p>
+      <ul class="about-list">
+        <li>Siliqon and VR Teacher are private, so their source cannot be inspected publicly.</li>
+        <li>VR Teacher&apos;s evaluation harness is built but not yet reported, so no quality score is claimed.</li>
+        <li>Siliqon has no public deployment, so it cannot be tried from a link.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section ruled shell" id="contact">
+  ${contactSection("Have something worth building?", "Tell me about the problem, the idea, or the opportunity. This form posts to a small API I wrote and host myself — it validates the message and hands it to an email service, and it reaches my inbox directly.")}
+</section>`,
+  { path: "/", current: "", scripts: contactScript });
+
+/* ------------------------------------------------------------------ *
+ * Work index
+ * ------------------------------------------------------------------ */
 
 const work = shell(
   "Work",
   "Three engineering case studies: resume intelligence, browser circuit simulation, and VR learning — each with architecture, tests and limits.",
-  `<section class="intro shell"><p class="eyebrow">Work / 2026</p><h1>Ambitious products are more convincing when the evidence travels with them.</h1><p>Three flagship projects spanning resume intelligence, browser-based electronics simulation, and VR learning. Every case records the problem, the engineering decisions, how it was tested, and what is still unfinished.</p></section><section class="section shell"><div class="grid two" data-reveal-group>${cases.map(card).join("")}</div></section>`,
-  "/work/");
+  `<section class="hero shell">
+    <p class="label label-accent" data-reveal>Work / 2026</p>
+    <div data-reveal><h1 class="display-sm t-title">${maskLines(["Evidence travels", "with the work."])}</h1></div>
+    <p class="lede t-lede" data-reveal>Three flagship projects spanning resume intelligence, browser-based electronics simulation, and VR learning. Every case records the problem, the engineering decisions, how it was tested, and what is still unfinished.</p>
+  </section>
+  <section class="section shell">
+    <div class="work-list">${cases.map((c, i) => project(c, { eager: i === 0 })).join("")}</div>
+  </section>
+  <section class="section ruled shell" id="contact">
+    ${contactSection("Want the detail behind one of these?", "Ask about any decision on these pages — the trade-offs are the interesting part. This form posts to a small API I wrote and host myself.")}
+  </section>`,
+  { path: "/work/", current: "work", scripts: contactScript });
+
+/* ------------------------------------------------------------------ *
+ * About
+ * ------------------------------------------------------------------ */
 
 const about = shell(
   "About",
   "How Sercan Özkan approaches backend systems, applied AI and technically complex products.",
-  `<section class="intro shell about"><div><p class="eyebrow">About</p><h1>I learn complex systems by making their boundaries, evidence, and failure modes visible.</h1></div>${imgTag("identity-kit-light.png", "Sercan Özkan identity kit", { lazy: false })}</section><section class="about-body shell" data-reveal><div><p class="big">I&apos;m Sercan Özkan, a computer engineering student focused on backend engineering for AI and data-heavy products.</p><p>I build APIs, data workflows and grounded AI features, then use simulation and XR projects to push the same engineering habits into harder technical domains. I want to trace how a decision is made, understand where data moves, and know what fails before adding another layer. Outside personal work I spent a summer on low-latency drone video streaming at ${experience.org}, measuring latency and packet loss across RTSP and RTP transports.</p><p>AI helps me plan, question, and document the work. I still check the source, run important paths, record uncertainty, and keep the technical decisions explainable.</p></div><aside><p class="eyebrow">Current limitations</p><ul><li>Siliqon has no public deployment, so it cannot be tried from a link.</li><li>VR Teacher&apos;s evaluation harness is implemented; benchmark results are still being collected.</li><li>Siliqon and VR Teacher are private, so their source cannot be inspected publicly.</li><li>VR Teacher still needs a strong in-headset demo capture.</li><li>There is no custom domain or analytics yet.</li><li>I used the identity kit instead of inventing a portrait.</li></ul></aside></section>`,
-  "/about/");
+  `<section class="hero shell">
+    <p class="label label-accent" data-reveal>About</p>
+    <div data-reveal><h1 class="display-sm t-title">${maskLines(["I learn complex systems by", "making their boundaries visible."])}</h1></div>
+  </section>
+  <section class="section shell">
+    <div class="about">
+      <div class="about-main" data-reveal>
+        <p class="lede">I&apos;m Sercan Özkan, a computer engineering student focused on backend engineering for AI and data-heavy products.</p>
+        <p class="prose t-body">I build APIs, data workflows and grounded AI features, then use simulation and XR projects to push the same engineering habits into harder technical domains. I want to trace how a decision is made, understand where data moves, and know what fails before adding another layer. Outside personal work I spent a summer on low-latency drone video streaming at ${experience.org}, measuring latency and packet loss across RTSP and RTP transports.</p>
+        <p class="prose">AI helps me plan, question, and document the work. I still check the source, run important paths, record uncertainty, and keep the technical decisions explainable.</p>
+        <p class="prose">The pattern that runs through all three projects on this site is the same: do the deterministic thing first, put a model behind a gate, and keep a test that proves the boundary still holds.</p>
+        <p class="actions t-actions"><a class="button button-primary" href="${base}/work/">See the case studies</a><a class="button" href="${cv}">Download CV ${arrow}</a></p>
+      </div>
+      <div class="about-side" data-reveal>
+        <figure class="about-figure">${imgTag("identity-kit.webp", "Sercan Özkan identity kit: logotype, palette and type specimen", { eager: true })}</figure>
+        <p class="label">Current limitations</p>
+        <ul class="about-list">
+          <li>Siliqon has no public deployment, so it cannot be tried from a link.</li>
+          <li>VR Teacher&apos;s evaluation harness is implemented; benchmark results are still being collected.</li>
+          <li>Siliqon and VR Teacher are private, so their source cannot be inspected publicly.</li>
+          <li>VR Teacher still needs a strong in-headset demo capture.</li>
+          <li>There is no custom domain or analytics yet.</li>
+          <li>I used the identity kit instead of inventing a portrait.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+  <section class="section ruled shell" id="contact">
+    ${contactSection("Let&apos;s talk about the system behind the screen.", "If you need backend engineering for an API, a data workflow or a grounded AI product — and value clear evidence over mystery — send me a note.")}
+  </section>`,
+  { path: "/about/", current: "about", scripts: contactScript });
+
+/* ------------------------------------------------------------------ *
+ * Contact
+ * ------------------------------------------------------------------ */
 
 const contact = shell(
   "Contact",
   "Contact Sercan Özkan about backend and applied AI engineering work.",
-  `<section class="contact shell"><p class="eyebrow">Contact</p><h1>Let&apos;s talk about the system behind the screen.</h1><p>If you need backend engineering for an API, data workflow or grounded AI product—and value clear evidence over mystery—send me a note. Email is the fastest route.</p><div class="contact-links" data-reveal-group><a href="mailto:${email}"><small>Email</small><b>${email}</b><span>↗</span></a><a href="${linkedin}"><small>Profile</small><b>LinkedIn</b><span>↗</span></a><a href="${repo}"><small>Code</small><b>GitHub</b><span>↗</span></a><a href="${cv}"><small>Resume</small><b>Download CV (English)</b><span>↗</span></a><a href="${booking}"><small>Booking</small><b>Request a conversation by email</b><span>↗</span></a></div></section>`,
-  "/contact/");
+  `<section class="hero shell">
+    <p class="label label-accent" data-reveal>Contact</p>
+    <div data-reveal><h1 class="display-sm t-title">${maskLines(["Let&apos;s talk about the", "system behind the screen."])}</h1></div>
+    <p class="lede t-lede" data-reveal>If you need backend engineering for an API, a data workflow or a grounded AI product — and value clear evidence over mystery — send me a note. The form below reaches my inbox directly.</p>
+  </section>
+  <section class="section shell">
+    ${contactSection("Have something worth building?", "Tell me about the problem, the idea, or the opportunity. This form posts to a small API I wrote and host myself: it validates the message, rate-limits abuse, and hands it to an email service that delivers it to me. I read every one and reply from my own address.")}
+  </section>`,
+  { path: "/contact/", current: "contact", scripts: contactScript });
+
+/* ------------------------------------------------------------------ *
+ * 404
+ * ------------------------------------------------------------------ */
 
 const notFound = shell(
   "Page not found",
   "That page does not exist on this portfolio.",
-  `<section class="intro shell"><p class="eyebrow">404</p><h1>That page moved on.</h1><p>The address you opened is not part of this portfolio. The work is one click away.</p><p class="actions"><a class="button dark" href="${base}/work/">View projects</a><a class="button" href="${base}/">Home</a></p></section>`,
-  "/404.html");
+  `<section class="hero shell">
+    <p class="label label-accent">Error 404</p>
+    <h1 class="display-sm t-title">This page does not exist.</h1>
+    <p class="lede t-lede">The link is broken or the page moved. The work, the case studies and the contact form are all one step away.</p>
+    <p class="actions t-actions"><a class="button button-primary" href="${base}/">Back to the start</a><a class="button" href="${base}/work/">See the work</a></p>
+  </section>`,
+  { path: "/404.html" });
 
 /* ------------------------------------------------------------------ *
  * Write
@@ -389,33 +911,61 @@ for (const c of cases) {
     ["Status", c.status],
     ["Problem", c.problem],
   ];
+
   const body = `<article>
-<header class="case-hero shell"><a class="mono back" href="${base}/work/">← All work</a><p class="eyebrow">Case ${c.number} / ${c.stack.join(" · ")}</p><h1>${c.title}</h1><p class="lede">${c.strap} ${c.summary}</p>${caseLinks(c, { onCasePage: true })}</header>
+<header class="case-hero shell">
+  <a class="back" href="${base}/work/">← All work</a>
+  <p class="project-index t-title"><span>${c.number}</span><span class="kind">${c.kind}</span></p>
+  <div data-reveal><h1 class="display-sm">${maskLines([c.title])}</h1></div>
+  <p class="lede t-lede" data-reveal>${c.strap} ${c.summary}</p>
+  ${caseLinks(c, { onCasePage: true })}
+</header>
 
-<dl class="overview shell" data-reveal-group>${overview.map(([k, v]) => `<div><dt class="mono">${k}</dt><dd>${v}</dd></div>`).join("")}</dl>
+<div class="shell"><dl class="overview" data-reveal-group>${overview.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join("")}</dl></div>
 
-<figure class="proof shell" data-reveal>${imgTag(c.image, `Evidence for ${c.title}`, { lazy: false })}<figcaption><span class="mono">Evidence</span>${c.proof}</figcaption></figure>
+<figure class="proof shell" data-reveal>
+  <div class="proof-media">${imgTag(c.image, `Evidence for ${c.title}: ${c.oneLine}`, { eager: true })}</div>
+  <figcaption><span class="label">Evidence</span>${c.proof}</figcaption>
+</figure>
 
-<section class="arch shell" data-reveal><p class="eyebrow">Architecture</p><h2>How the pieces fit</h2>${diagrams[c.slug]}</section>
+<section class="shell" data-reveal>
+  <p class="label label-accent">Architecture</p>
+  <h2 class="h2 t-heading">How the pieces fit</h2>
+  <figure class="exhibit"><div class="exhibit-figure">${diagrams[c.slug]}</div><p class="exhibit-scroll" aria-hidden="true">Scroll the diagram →</p></figure>
+</section>
 
-<div class="case-body shell"><aside><p class="eyebrow">Stack</p>${tags(c.stack)}</aside><div>
-<section data-reveal><p class="eyebrow">Challenge</p><h2>What needed to change</h2><p>${c.challenge}</p></section>
-<section data-reveal><p class="eyebrow">Approach</p><h2>How I built it</h2><ol>${c.approach.map(x => `<li>${x}</li>`).join("")}</ol></section>
-<section data-reveal><p class="eyebrow">Engineering decisions</p><h2>Why it is built this way</h2><dl class="decisions" data-reveal-group>${c.decisions.map(([q, a]) => `<div><dt>${q}</dt><dd>${a}</dd></div>`).join("")}</dl></section>
-<section data-reveal><p class="eyebrow">Testing</p><h2>How it is verified</h2><p>${c.testing}</p></section>
-<section data-reveal><p class="eyebrow">Result</p><h2>What landed</h2><p>${c.outcome}</p></section>
-<section class="limit" data-reveal><p class="eyebrow">What I&apos;d improve</p><h2>What is not finished</h2><p>${c.limitation}</p></section>
-</div></div></article>
-<section class="next shell" data-reveal><p class="eyebrow">Next case</p><a href="${base}/work/${next.slug}/">${next.title} <b>→</b></a></section>`;
+<div class="case-body shell section">
+  <aside class="case-aside" data-reveal>
+    <p class="label">Stack</p>
+    ${chips(c.stack)}
+    ${chips(c.chips, true)}
+  </aside>
+  <div class="case-main">
+    <section data-reveal><p class="label label-accent">Challenge</p><h2>What needed to change</h2><p>${c.challenge}</p></section>
+    <section data-reveal><p class="label label-accent">Approach</p><h2>How I built it</h2><ol>${c.approach.map((x) => `<li>${x}</li>`).join("")}</ol></section>
+    <section data-reveal><p class="label label-accent">Engineering decisions</p><h2>Why it is built this way</h2><dl class="decisions">${c.decisions.map(([q, a]) => `<div><dt>${q}</dt><dd>${a}</dd></div>`).join("")}</dl></section>
+    <section data-reveal><p class="label label-accent">Testing</p><h2>How it is verified</h2><p>${c.testing}</p></section>
+    <section data-reveal><p class="label label-accent">Result</p><h2>What landed</h2><p>${c.outcome}</p></section>
+    <section class="limit" data-reveal><p class="label">What is not finished</p><h2 class="h3">Honest limits</h2><p>${c.limitation}</p></section>
+  </div>
+</div>
+
+<div class="shell"><nav class="next-case" aria-label="Next case study">
+  <p class="label">Next case</p>
+  <a href="${base}/work/${next.slug}/">${next.title} ${arrowRight}</a>
+</nav></div>
+</article>`;
+
   const dir = join(root, "work", c.slug);
   await mkdir(dir, { recursive: true });
-  await writeFile(join(dir, "index.html"), shell(c.title, c.summary, body, `/work/${c.slug}/`));
+  await writeFile(join(dir, "index.html"),
+    shell(c.title, c.summary, body, { path: `/work/${c.slug}/`, current: "work" }));
 }
 
-const urls = ["/", "/work/", "/about/", "/contact/", ...cases.map(c => `/work/${c.slug}/`)];
+const urls = ["/", "/work/", "/about/", "/contact/", ...cases.map((c) => `/work/${c.slug}/`)];
 await writeFile(join(root, "sitemap.xml"),
   `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
-  urls.map(u => `  <url><loc>${site}${u}</loc></url>`).join("\n") + `\n</urlset>\n`);
+  urls.map((u) => `  <url><loc>${site}${u}</loc></url>`).join("\n") + `\n</urlset>\n`);
 
 await writeFile(join(root, "robots.txt"),
   `User-agent: *\nAllow: /\n\nSitemap: ${site}/sitemap.xml\n`);

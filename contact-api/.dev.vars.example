@@ -1,0 +1,4 @@
+# Copy to .dev.vars for `wrangler dev`. .dev.vars is git-ignored and must
+# never be committed. In production the key is an encrypted Worker secret
+# set with: npx wrangler secret put RESEND_API_KEY
+RESEND_API_KEY=re_your_key_here
