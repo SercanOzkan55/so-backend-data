@@ -5,8 +5,8 @@ import { join } from "node:path";
  * Sercan Özkan — portfolio build
  *
  * One Node script writes every page from the data below. There is no
- * framework and no dependency: the site is nine static files, and the
- * only thing on it that talks to a server is the contact form.
+ * framework and no dependency: the build emits static pages, and the
+ * only thing on them that talks to a server is the contact form.
  * ==================================================================== */
 
 const root = new URL(".", import.meta.url).pathname.replace(/^\/(?:[A-Za-z]:)/, (m) => m.slice(1));
@@ -35,6 +35,9 @@ const imageDims = {
   "siliqon-app.webp": [1800, 943],
   "identity-kit.webp": [900, 1260],
   "vr-teacher-cover.svg": [1200, 750],
+  "image-matching-engine.webp": [1600, 900],
+  "foodapp.webp": [1600, 900],
+  "millionaire.webp": [1600, 900],
 };
 
 function imgTag(file, alt, { eager = false } = {}) {
@@ -321,6 +324,45 @@ const diagrams = {
     svgArrow(650, 150, 718, 150),
     `<text x="0" y="300" class="dg-note">No retrieved context, no answer: the model must say the material does not cover it</text>`,
   ].join(""), "VR Teacher retrieval and voice loop"),
+
+  "image-matching-engine": svgWrap("0 0 940 300", [
+    svgBox(0, 80, 165, 64, "Image corpus", "~50 labelled photos"),
+    svgBox(220, 25, 175, 64, "Vision metadata", "Zod-validated", "dg-primary"),
+    svgBox(220, 155, 175, 64, "Embeddings", "L2-normalized"),
+    svgBox(455, 80, 175, 64, "Cosine ranking", "article ↔ image"),
+    svgBox(690, 25, 200, 64, "Mismatch guard", "threshold + taxonomy", "dg-accent"),
+    svgBox(690, 155, 200, 64, "Review API", "approve · reject · cost"),
+    svgArrow(165, 110, 218, 57), svgArrow(165, 112, 218, 185),
+    svgArrow(395, 57, 453, 102), svgArrow(395, 187, 453, 122),
+    svgArrow(630, 102, 688, 57), svgArrow(630, 122, 688, 187),
+    `<text x="0" y="270" class="dg-note">Low confidence or a category conflict returns no match instead of forcing a recommendation</text>`,
+  ].join(""), "Image matching and mismatch guard pipeline"),
+
+  foodapp: svgWrap("0 0 940 300", [
+    svgBox(0, 95, 165, 64, "Session auth", "role gate", "dg-primary"),
+    svgBox(235, 20, 180, 64, "Admin panel", "users · reporting"),
+    svgBox(235, 112, 180, 64, "Seller panel", "menu · order state", "dg-accent"),
+    svgBox(235, 204, 180, 64, "Customer panel", "cart · checkout"),
+    svgBox(520, 95, 180, 64, "Order workflow", "pending → delivered"),
+    svgBox(775, 95, 165, 64, "MySQL", "relational state"),
+    svgArrow(165, 120, 233, 52), svgArrow(165, 127, 233, 144), svgArrow(165, 136, 233, 236),
+    svgArrow(415, 52, 518, 112), svgArrow(415, 144, 518, 126), svgArrow(415, 236, 518, 145),
+    svgArrow(700, 127, 773, 127),
+    `<text x="0" y="292" class="dg-note">Menus, carts, payments, ratings and loyalty points meet at one persisted order record</text>`,
+  ].join(""), "FoodApp role and order architecture"),
+
+  millionaire: svgWrap("0 0 940 300", [
+    svgBox(0, 85, 175, 64, "Swing UI", "question + prize ladder", "dg-primary"),
+    svgBox(245, 25, 175, 64, "Game state", "difficulty · lifelines"),
+    svgBox(245, 165, 175, 64, "Joker interface", "50:50 · audience"),
+    svgBox(500, 25, 175, 64, "Firebase REST", "remote questions"),
+    svgBox(500, 165, 175, 64, "TCP socket", "audience signal", "dg-accent"),
+    svgBox(755, 85, 185, 64, "Background work", "keep UI responsive"),
+    svgArrow(175, 108, 243, 57), svgArrow(175, 126, 243, 197),
+    svgArrow(420, 57, 498, 57), svgArrow(420, 197, 498, 197),
+    svgArrow(675, 57, 753, 108), svgArrow(675, 197, 753, 128),
+    `<text x="0" y="270" class="dg-note">The quiz remains a desktop game while questions and audience signalling cross the network boundary</text>`,
+  ].join(""), "Millionaire desktop and network architecture"),
 };
 
 /* ------------------------------------------------------------------ *
@@ -371,7 +413,7 @@ const cases = [
     stack: ["TypeScript", "React", "PixiJS", "Web Worker", "Supabase", "Vitest"],
     chips: ["295 tests", "40+ components", "6 boards"],
     role: "Solo — simulation engine, interpreter, UI, cloud sync",
-    activity: "Jul – Aug 2026 · 44 commits",
+    activity: "Jul – Aug 2026 · 8 commits",
     status: "Private, no public deployment",
     repoUrl: null,
     liveUrl: null,
@@ -404,7 +446,7 @@ const cases = [
     stack: ["Unity", "C#", "FastAPI", "ChromaDB", "Whisper", "Azure TTS"],
     chips: ["RAG + voice", "9 documents", "6 eval metrics"],
     role: "Solo — Unity client, RAG backend, evaluation harness",
-    activity: "Jul – Aug 2026 · 187 commits",
+    activity: "Jul – Aug 2026 · 213 commits",
     status: "Private prototype",
     repoUrl: null,
     liveUrl: null,
@@ -425,6 +467,100 @@ const cases = [
     outcome: "Nine experiment documents are ingested and queryable, and the full loop runs: spoken question, transcription, retrieval, grounded answer with sources, spoken reply from a lip-synced avatar.",
     proof: "The private repository holds the Unity project, the FastAPI backend, the architecture document with the RAG and evaluation design, the experiment corpus, and the benchmark test set.",
     limitation: "The evaluation harness is built but not yet reported: the test set holds fifteen question-answer pairs and no benchmark run is recorded, so no quality number is claimed here. Headset usability and learning outcomes are likewise unmeasured, and the project stays a private prototype.",
+  },
+  {
+    slug: "image-matching-engine", number: "04", title: "Image Matching Engine",
+    kind: "VISION AI", treatment: "split",
+    strap: "The system is allowed to say no.",
+    oneLine: "AI image understanding and article matching engine",
+    summary: "A TypeScript service that understands an image library, ranks article-to-image matches, and rejects unsafe or low-confidence pairings with a human-readable reason.",
+    image: "image-matching-engine.webp",
+    stack: ["TypeScript", "Express", "Zod", "Gemini", "Vitest", "Cosine similarity"],
+    chips: ["100% top-1 eval", "10 / 10 tests", "~50-image corpus"],
+    role: "Solo capstone — backend, evaluation pipeline, interactive dashboard",
+    activity: "Aug 2026 · 8 commits",
+    status: "Public repository · local working demo",
+    repoUrl: "https://github.com/SercanOzkan55/flyrank-capstone-image-relevance",
+    liveUrl: null,
+    problem: "Recommend a useful editorial image without forcing a match when the subject, category or confidence is wrong.",
+    challenge: "Turn a small image corpus into structured, searchable evidence, then make the matching decision inspectable and safe enough to refuse a plausible-looking but incorrect candidate.",
+    approach: [
+      "Built a batch ingestion path that extracts structured vision metadata, validates every record with Zod, generates normalized embeddings, and stores both the machine representation and the human-readable description.",
+      "Ranked article and image vectors with cosine similarity, then put a separate mismatch guard after ranking. Similarity thresholds, confidence checks and taxonomic conflicts can reject the top candidate or return no confident match.",
+      "Added a review API, cost ledger, near-duplicate detection and context-aware alt-text generation so the result can be audited and used by an editorial workflow rather than ending as a notebook score.",
+      "Kept a deterministic offline provider for repeatable evaluation when no Gemini key is present, while preserving the same service boundary for a live vision provider.",
+    ],
+    decisions: [
+      ["A guard after ranking", "The nearest vector is not automatically the right asset. Separating retrieval from acceptance lets the system reject a wolf for a fox article even when the candidate looks semantically close."],
+      ["Schema validation at ingestion", "If image metadata changes shape halfway through a batch, every later score becomes suspect. Zod rejects bad records before they enter the index."],
+      ["A reproducible offline evaluator", "A live model is useful for production, but an evaluation that changes with an external call is difficult to debug. The fallback keeps acceptance probes repeatable and cost-free."],
+    ],
+    testing: "Ten Vitest acceptance and stretch-feature tests pass against the labelled corpus. The recorded evaluation reports 100% top-1 precision, 100% forced-mismatch rejection and 100% schema-validation reliability for this dataset.",
+    outcome: "The shipped service exposes ingestion, matching, refusal, evaluation, review, cost, alt-text and duplicate-detection endpoints, with an interactive studio that shows why a candidate was accepted or rejected.",
+    proof: "This capture comes from the repository running locally: the red-fox article is matched to the labelled fox image, the mismatch guard clears the candidate, and the ranked alternatives remain available for review.",
+    limitation: "The benchmark is a labelled corpus of roughly fifty images, not evidence of internet-scale retrieval. The 100% score is valid for that fixed evaluation set; broader domains would need a larger corpus, per-category threshold tuning and a production vector index.",
+  },
+  {
+    slug: "foodapp", number: "05", title: "FoodApp",
+    kind: "FULL-STACK", treatment: "story",
+    strap: "One order, three role-specific views.",
+    oneLine: "Role-based food ordering system",
+    summary: "A PHP and MySQL ordering platform with separate admin, seller and customer panels, persistent carts, order tracking, ratings, favourites and loyalty points.",
+    image: "foodapp.webp",
+    stack: ["PHP", "MySQL", "Session auth", "HTML", "CSS", "XAMPP"],
+    chips: ["3 role panels", "Order lifecycle", "Ratings + points"],
+    role: "Solo — database model, role workflows, PHP views and UI",
+    activity: "Dec 2025 – Feb 2026 · 15 commits",
+    status: "Public repository · local XAMPP application",
+    repoUrl: "https://github.com/SercanOzkan55/FoodApp",
+    liveUrl: null,
+    problem: "Keep restaurants, menus, carts, payments and delivery status consistent while each role sees a different job to do.",
+    challenge: "Model a complete order lifecycle across customers, sellers and administrators without mixing permissions or losing the relationship between an order, its line items and its payment state.",
+    approach: [
+      "Gated each panel with session-based role checks, then separated admin, seller and customer routes so navigation and actions follow the user's job rather than one overloaded dashboard.",
+      "Modelled users, restaurants, menus, carts, orders, order items, payments, ratings, favourites and loyalty points in MySQL with the order record as the workflow centre.",
+      "At checkout, copied cart lines into order items, recorded payment and loyalty-point changes, cleared the cart, and handed the order to the seller's status flow from pending through delivery.",
+    ],
+    decisions: [
+      ["Role-specific panels", "A seller needs menu and incoming-order controls; a customer needs discovery, checkout and tracking. Separate panels keep permission checks and interface decisions legible."],
+      ["Order items as a snapshot", "A menu price can change after checkout. Persisting quantity and price on the order line preserves what the customer actually bought."],
+      ["Relational state for the workflow", "Orders connect users, restaurants, payments and ratings. Foreign-key relationships make those joins explicit and keep reporting possible."],
+    ],
+    testing: "The repository documents and captures the main manual flows: registration and login, role dashboards, restaurant and menu management, cart and checkout, status updates, favourites, ratings and loyalty points. No automated test suite is documented, so none is claimed.",
+    outcome: "The application covers the complete local ordering loop: customers browse and buy, sellers manage menus and fulfil orders, and administrators manage users and inspect system activity from a separate panel.",
+    proof: "The repository's customer capture shows the running restaurant catalogue with search, category filters, favourites, cart access, ratings and loyalty state connected to the signed-in account.",
+    limitation: "This is an educational local application, not a production deployment. Several database writes still need prepared statements and transaction boundaries, and production use would also require CSRF protection, environment-based secrets, automated tests and deployment automation.",
+  },
+  {
+    slug: "millionaire", number: "06", title: "Who Wants to Be a Millionaire?",
+    kind: "NETWORKED DESKTOP", treatment: "split",
+    strap: "A familiar game used to connect GUI, remote data and sockets.",
+    oneLine: "Java Swing quiz game with networked services",
+    summary: "A modular Java desktop quiz game with a prize ladder, two lifelines, Firebase-backed questions and TCP socket signalling for the audience interaction.",
+    image: "millionaire.webp",
+    stack: ["Java", "Swing", "TCP sockets", "Firebase REST", "Gson", "Multithreading"],
+    chips: ["TCP client / server", "2 lifelines", "Remote questions"],
+    role: "Solo — game state, Swing interface, networking and data integration",
+    activity: "Feb 2026 · 4 commits",
+    status: "Public repository · desktop prototype",
+    repoUrl: "https://github.com/SercanOzkan55/WhoWantsToBeAMillioner",
+    liveUrl: null,
+    problem: "Keep a desktop quiz responsive while questions and audience signalling cross two different network boundaries.",
+    challenge: "Combine a stateful prize-ladder game, reusable lifelines, remote question loading and TCP communication without letting network work freeze the Swing event thread.",
+    approach: [
+      "Separated the game frame, reusable controls and lifelines into classes, with a shared Joker interface for 50:50 and audience behavior instead of hard-coding both paths into the question screen.",
+      "Loaded the question set from Firebase Realtime Database through its REST endpoint and converted the JSON response into typed question objects with Gson.",
+      "Used TCP socket signalling for the audience lifeline and kept network work away from direct UI updates, returning changes to Swing's event-dispatch model.",
+    ],
+    decisions: [
+      ["A common lifeline interface", "Both lifelines can be triggered once but change the game differently. One contract keeps the frame independent of each implementation."],
+      ["Firebase REST for questions", "Remote JSON makes the question bank replaceable without shipping another desktop build, while Gson keeps the mapping small and explicit."],
+      ["TCP as a visible system boundary", "The audience action is more useful as a networking exercise when it crosses a real client-server connection rather than calling another local method."],
+    ],
+    testing: "The repository includes six captures of the main game states and documents manual runs for question display, both lifelines, correct-answer feedback, game over and TCP audience communication. No automated tests or reproducible build file are present, so none is claimed.",
+    outcome: "The prototype delivers the playable loop with progressive questions and rewards, reusable lifelines, remote question data, persistent Firebase integration and a socket-backed audience interaction without abandoning the desktop UI.",
+    proof: "The repository's running-game capture shows the Swing question screen, prize progression, answer controls and both lifelines in the same playable state.",
+    limitation: "The Firebase endpoint is hard-coded, dependency jars are committed directly, and the socket protocol has no documented reconnect or authentication strategy. A production pass would add a build tool, configuration, tests and explicit failure-state UI.",
   },
 ];
 
@@ -600,9 +736,9 @@ function projectFacts(c) {
     `</dl>`;
 }
 
-// Three treatments, one design system. The lead project gets cinematic
-// width, the second a split technical read, the third a reversed
-// compact story — so range shows without the page losing its grammar.
+// Three reusable treatments, one design system. The lead project gets
+// cinematic width; the remaining projects alternate technical and story
+// layouts so range shows without the page losing its grammar.
 function project(c, { eager = false } = {}) {
   const head = `<p class="project-index"><span>${c.number}</span><span class="kind">${c.kind}</span><span>${c.stack.slice(0, 3).join(" · ")}</span></p>`;
 
@@ -703,7 +839,7 @@ const home = shell(
   <dl class="hero-meta" data-reveal-group>
     <div><dt>Building across</dt><dd>Web · AI · Cloud · Interactive</dd></div>
     <div><dt>Primary stack</dt><dd>Python · FastAPI · PostgreSQL · React</dd></div>
-    <div><dt>Evidence</dt><dd>1,190+ automated tests across three systems</dd></div>
+    <div><dt>Evidence</dt><dd>1,200+ automated tests across four tested systems</dd></div>
     <div><dt>Currently</dt><dd>Computer engineering student, open to roles</dd></div>
   </dl>
 
@@ -718,7 +854,7 @@ const home = shell(
 </section>
 
 <section class="section ruled shell" id="work">
-  ${sectionHead("Selected work", "Three systems, each with its architecture, its tests, and its limits.", "Every number on this page is counted from the repository it belongs to.")}
+  ${sectionHead("Selected work", "Six projects, each with its architecture, its evidence, and its limits.", "Every number on this page is counted from the repository it belongs to.")}
   <div class="work-list">${cases.map((c, i) => project(c, { eager: i === 0 })).join("")}</div>
 </section>
 
@@ -801,11 +937,11 @@ const home = shell(
 
 const work = shell(
   "Work",
-  "Three engineering case studies: resume intelligence, browser circuit simulation, and VR learning — each with architecture, tests and limits.",
+  "Six engineering case studies across applied AI, simulation, VR, full-stack web and networked desktop software.",
   `<section class="hero shell">
     <p class="label label-accent" data-reveal>Work / 2026</p>
     <div data-reveal><h1 class="display-sm t-title">${maskLines(["Evidence travels", "with the work."])}</h1></div>
-    <p class="lede t-lede" data-reveal>Three flagship projects spanning resume intelligence, browser-based electronics simulation, and VR learning. Every case records the problem, the engineering decisions, how it was tested, and what is still unfinished.</p>
+    <p class="lede t-lede" data-reveal>Six substantial projects spanning resume intelligence, browser-based electronics simulation, VR learning, image matching, full-stack ordering and networked desktop software. Every case records the problem, the engineering decisions, how it was tested, and what is still unfinished.</p>
   </section>
   <section class="section shell">
     <div class="work-list">${cases.map((c, i) => project(c, { eager: i === 0 })).join("")}</div>
@@ -832,7 +968,7 @@ const about = shell(
         <p class="lede">I&apos;m Sercan Özkan, a computer engineering student focused on backend engineering for AI and data-heavy products.</p>
         <p class="prose t-body">I build APIs, data workflows and grounded AI features, then use simulation and XR projects to push the same engineering habits into harder technical domains. I want to trace how a decision is made, understand where data moves, and know what fails before adding another layer. Outside personal work I spent a summer on low-latency drone video streaming at ${experience.org}, measuring latency and packet loss across RTSP and RTP transports.</p>
         <p class="prose">AI helps me plan, question, and document the work. I still check the source, run important paths, record uncertainty, and keep the technical decisions explainable.</p>
-        <p class="prose">The pattern that runs through all three projects on this site is the same: do the deterministic thing first, put a model behind a gate, and keep a test that proves the boundary still holds.</p>
+        <p class="prose">The pattern that runs through the strongest projects on this site is the same: do the deterministic thing first, put a model behind a gate, and keep evidence that proves the boundary still holds.</p>
         <p class="actions t-actions"><a class="button button-primary" href="${base}/work/">See the case studies</a><a class="button" href="${cv}">Download CV ${arrow}</a></p>
       </div>
       <div class="about-side" data-reveal>

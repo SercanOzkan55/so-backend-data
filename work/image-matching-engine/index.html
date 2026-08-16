@@ -1,0 +1,156 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Image Matching Engine | Sercan Özkan</title><meta name="description" content="A TypeScript service that understands an image library, ranks article-to-image matches, and rejects unsafe or low-confidence pairings with a human-readable reason."><link rel="canonical" href="https://sercanozkan55.github.io/Portfolio/work/image-matching-engine/"><meta property="og:title" content="Image Matching Engine | Sercan Özkan"><meta property="og:description" content="A TypeScript service that understands an image library, ranks article-to-image matches, and rejects unsafe or low-confidence pairings with a human-readable reason."><meta property="og:type" content="website"><meta property="og:url" content="https://sercanozkan55.github.io/Portfolio/work/image-matching-engine/"><meta property="og:image" content="https://sercanozkan55.github.io/Portfolio/assets/images/social-preview.jpg"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://sercanozkan55.github.io/Portfolio/assets/images/social-preview.jpg"><meta name="theme-color" content="#08090b"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap"><link rel="stylesheet" href="/Portfolio/assets/styles.css"><link rel="icon" href="/Portfolio/assets/favicon.svg"><script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Sercan Özkan","jobTitle":"Backend Engineer for AI and Data Products","url":"https://sercanozkan55.github.io/Portfolio/","email":"mailto:ozkansercan55@gmail.com","sameAs":["https://www.linkedin.com/in/sercan-%C3%B6zkan-a205852a7/","https://github.com/SercanOzkan55"],"knowsAbout":["Backend engineering","FastAPI","PostgreSQL","Retrieval-augmented generation","Circuit simulation","Unity XR"],"alumniOf":{"@type":"CollegeOrUniversity","name":"Istanbul Health and Technology University"}}</script><script>document.documentElement.classList.add("js");if(!matchMedia("(prefers-reduced-motion: reduce)").matches)document.documentElement.classList.add("js-motion")</script></head><body><a class="skip" href="#main">Skip to content</a><div class="nav-wrap"><div class="nav-bar"><div class="shell"><div class="nav"><a class="brand" href="/Portfolio/"><span class="brand-name">Sercan Özkan</span><span class="brand-role">Backend / Applied AI</span></a><button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Menu"><span></span><span></span><span></span></button><nav class="nav-links" id="nav-links" aria-label="Primary"><a href="/Portfolio/work/" aria-current="page">Work</a><a href="/Portfolio/#capabilities">Capabilities</a><a href="/Portfolio/about/">About</a><a href="/Portfolio/contact/">Contact</a><a class="nav-cta" href="/Portfolio/contact/">Let&apos;s talk <span class="arrow" aria-hidden="true">→</span></a></nav><p class="nav-live"><span class="status-dot" aria-hidden="true"></span>Open to roles</p></div></div><div class="scroll-progress" aria-hidden="true"></div></div></div><main id="main"><article>
+<header class="case-hero shell">
+  <a class="back" href="/Portfolio/work/">← All work</a>
+  <p class="project-index t-title"><span>04</span><span class="kind">VISION AI</span></p>
+  <div data-reveal><h1 class="display-sm"><span class="mask"><span>Image Matching Engine </span></span></h1></div>
+  <p class="lede t-lede" data-reveal>The system is allowed to say no. A TypeScript service that understands an image library, ranks article-to-image matches, and rejects unsafe or low-confidence pairings with a human-readable reason.</p>
+  <p class="actions"><a class="button" href="https://github.com/SercanOzkan55/flyrank-capstone-image-relevance">Source <span class="arrow" aria-hidden="true">↗</span></a></p>
+</header>
+
+<div class="shell"><dl class="overview" data-reveal-group><div><dt>Role</dt><dd>Solo capstone — backend, evaluation pipeline, interactive dashboard</dd></div><div><dt>Repo activity</dt><dd>Aug 2026 · 8 commits</dd></div><div><dt>Status</dt><dd>Public repository · local working demo</dd></div><div><dt>Problem</dt><dd>Recommend a useful editorial image without forcing a match when the subject, category or confidence is wrong.</dd></div></dl></div>
+
+<figure class="proof shell" data-reveal>
+  <div class="proof-media"><img src="/Portfolio/assets/images/image-matching-engine.webp" alt="Evidence for Image Matching Engine: AI image understanding and article matching engine" width="1600" height="900" decoding="async" fetchpriority="high"></div>
+  <figcaption><span class="label">Evidence</span>This capture comes from the repository running locally: the red-fox article is matched to the labelled fox image, the mismatch guard clears the candidate, and the ranked alternatives remain available for review.</figcaption>
+</figure>
+
+<section class="shell" data-reveal>
+  <p class="label label-accent">Architecture</p>
+  <h2 class="h2 t-heading">How the pieces fit</h2>
+  <figure class="exhibit"><div class="exhibit-figure"><svg viewBox="0 0 940 300" role="img" aria-label="Image matching and mismatch guard pipeline" class="diagram"><defs><marker id="dg-head" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-headfill"/></marker></defs><g class="dg-node "><rect x="0" y="80" width="165" height="64" rx="2"/><text x="82.5" y="110" class="dg-label">Image corpus</text><text x="82.5" y="127" class="dg-sub">~50 labelled photos</text></g><g class="dg-node dg-primary"><rect x="220" y="25" width="175" height="64" rx="2"/><text x="307.5" y="55" class="dg-label">Vision metadata</text><text x="307.5" y="72" class="dg-sub">Zod-validated</text></g><g class="dg-node "><rect x="220" y="155" width="175" height="64" rx="2"/><text x="307.5" y="185" class="dg-label">Embeddings</text><text x="307.5" y="202" class="dg-sub">L2-normalized</text></g><g class="dg-node "><rect x="455" y="80" width="175" height="64" rx="2"/><text x="542.5" y="110" class="dg-label">Cosine ranking</text><text x="542.5" y="127" class="dg-sub">article ↔ image</text></g><g class="dg-node dg-accent"><rect x="690" y="25" width="200" height="64" rx="2"/><text x="790" y="55" class="dg-label">Mismatch guard</text><text x="790" y="72" class="dg-sub">threshold + taxonomy</text></g><g class="dg-node "><rect x="690" y="155" width="200" height="64" rx="2"/><text x="790" y="185" class="dg-label">Review API</text><text x="790" y="202" class="dg-sub">approve · reject · cost</text></g><line x1="165" y1="110" x2="218" y2="57" class="dg-arrow" marker-end="url(#dg-head)"/><line x1="165" y1="112" x2="218" y2="185" class="dg-arrow" marker-end="url(#dg-head)"/><line x1="395" y1="57" x2="453" y2="102" class="dg-arrow" marker-end="url(#dg-head)"/><line x1="395" y1="187" x2="453" y2="122" class="dg-arrow" marker-end="url(#dg-head)"/><line x1="630" y1="102" x2="688" y2="57" class="dg-arrow" marker-end="url(#dg-head)"/><line x1="630" y1="122" x2="688" y2="187" class="dg-arrow" marker-end="url(#dg-head)"/><text x="0" y="270" class="dg-note">Low confidence or a category conflict returns no match instead of forcing a recommendation</text></svg></div><p class="exhibit-scroll" aria-hidden="true">Scroll the diagram →</p></figure>
+</section>
+
+<div class="case-body shell section">
+  <aside class="case-aside" data-reveal>
+    <p class="label">Stack</p>
+    <ul class="chips"><li>TypeScript</li><li>Express</li><li>Zod</li><li>Gemini</li><li>Vitest</li><li>Cosine similarity</li></ul>
+    <ul class="chips chips-accent"><li>100% top-1 eval</li><li>10 / 10 tests</li><li>~50-image corpus</li></ul>
+  </aside>
+  <div class="case-main">
+    <section data-reveal><p class="label label-accent">Challenge</p><h2>What needed to change</h2><p>Turn a small image corpus into structured, searchable evidence, then make the matching decision inspectable and safe enough to refuse a plausible-looking but incorrect candidate.</p></section>
+    <section data-reveal><p class="label label-accent">Approach</p><h2>How I built it</h2><ol><li>Built a batch ingestion path that extracts structured vision metadata, validates every record with Zod, generates normalized embeddings, and stores both the machine representation and the human-readable description.</li><li>Ranked article and image vectors with cosine similarity, then put a separate mismatch guard after ranking. Similarity thresholds, confidence checks and taxonomic conflicts can reject the top candidate or return no confident match.</li><li>Added a review API, cost ledger, near-duplicate detection and context-aware alt-text generation so the result can be audited and used by an editorial workflow rather than ending as a notebook score.</li><li>Kept a deterministic offline provider for repeatable evaluation when no Gemini key is present, while preserving the same service boundary for a live vision provider.</li></ol></section>
+    <section data-reveal><p class="label label-accent">Engineering decisions</p><h2>Why it is built this way</h2><dl class="decisions"><div><dt>A guard after ranking</dt><dd>The nearest vector is not automatically the right asset. Separating retrieval from acceptance lets the system reject a wolf for a fox article even when the candidate looks semantically close.</dd></div><div><dt>Schema validation at ingestion</dt><dd>If image metadata changes shape halfway through a batch, every later score becomes suspect. Zod rejects bad records before they enter the index.</dd></div><div><dt>A reproducible offline evaluator</dt><dd>A live model is useful for production, but an evaluation that changes with an external call is difficult to debug. The fallback keeps acceptance probes repeatable and cost-free.</dd></div></dl></section>
+    <section data-reveal><p class="label label-accent">Testing</p><h2>How it is verified</h2><p>Ten Vitest acceptance and stretch-feature tests pass against the labelled corpus. The recorded evaluation reports 100% top-1 precision, 100% forced-mismatch rejection and 100% schema-validation reliability for this dataset.</p></section>
+    <section data-reveal><p class="label label-accent">Result</p><h2>What landed</h2><p>The shipped service exposes ingestion, matching, refusal, evaluation, review, cost, alt-text and duplicate-detection endpoints, with an interactive studio that shows why a candidate was accepted or rejected.</p></section>
+    <section class="limit" data-reveal><p class="label">What is not finished</p><h2 class="h3">Honest limits</h2><p>The benchmark is a labelled corpus of roughly fifty images, not evidence of internet-scale retrieval. The 100% score is valid for that fixed evaluation set; broader domains would need a larger corpus, per-category threshold tuning and a production vector index.</p></section>
+  </div>
+</div>
+
+<div class="shell"><nav class="next-case" aria-label="Next case study">
+  <p class="label">Next case</p>
+  <a href="/Portfolio/work/foodapp/">FoodApp <span class="arrow" aria-hidden="true">→</span></a>
+</nav></div>
+</article></main><footer class="site-footer shell"><div class="footer-id"><b>Sercan Özkan</b><span>Backend engineer for AI and data products. Decisions, evidence, and honest limits.</span></div><nav class="footer-links" aria-label="Footer"><a href="/Portfolio/work/">Work</a><a href="/Portfolio/about/">About</a><a href="https://github.com/SercanOzkan55">GitHub</a><a href="https://www.linkedin.com/in/sercan-%C3%B6zkan-a205852a7/">LinkedIn</a><a href="mailto:ozkansercan55@gmail.com">Email</a><a href="/Portfolio/assets/Sercan_Ozkan_CV_EN.pdf">CV</a></nav><p class="footer-note"><span>© 2026 Sercan Özkan</span><span>Designed and built by me — static site, one live endpoint</span></p></footer><script>(function(){
+var root=document.documentElement;
+var motion=root.classList.contains("js-motion");
+
+/* ---- mobile navigation: a sheet, not a cramped dropdown ---- */
+var bar=document.querySelector(".nav-bar");
+var toggle=document.querySelector(".nav-toggle");
+if(toggle&&bar){
+  var close=function(){document.body.classList.remove("nav-open");toggle.setAttribute("aria-expanded","false")};
+  toggle.addEventListener("click",function(){
+    var open=document.body.classList.toggle("nav-open");
+    toggle.setAttribute("aria-expanded",open?"true":"false");
+  });
+  document.querySelectorAll(".nav-links a").forEach(function(a){a.addEventListener("click",close)});
+  addEventListener("keydown",function(e){if(e.key==="Escape")close()});
+}
+
+/* ---- sticky header state + scroll progress ---- */
+var progress=document.querySelector(".scroll-progress");
+var stuck=false,ticking=false;
+function onScroll(){
+  if(ticking)return;ticking=true;
+  requestAnimationFrame(function(){
+    var y=scrollY;
+    var s=y>16;
+    if(s!==stuck&&bar){stuck=s;bar.classList.toggle("is-stuck",s)}
+    if(progress){
+      var h=document.documentElement.scrollHeight-innerHeight;
+      progress.style.transform="scaleX("+(h>0?Math.min(y/h,1):0)+")";
+    }
+    ticking=false;
+  });
+}
+addEventListener("scroll",onScroll,{passive:true});onScroll();
+
+if(!motion)return;
+
+/* ---- reveals ----
+   Reveal styles hide content until a callback runs, so the callback not
+   running must never be able to swallow the page. IntersectionObserver
+   reports every target once on observe, which makes it its own health
+   check: no report at all means it is throttled or absent, and
+   everything is shown outright. */
+var targets=document.querySelectorAll("[data-reveal],[data-reveal-group]");
+function revealAll(){root.classList.remove("js-motion")}
+document.querySelectorAll("[data-reveal-group]").forEach(function(g){
+  Array.prototype.forEach.call(g.children,function(c,i){c.style.setProperty("--i",i)});
+});
+document.querySelectorAll(".mask").forEach(function(m,i){m.style.setProperty("--i",i%6)});
+
+if(!("IntersectionObserver" in window)){revealAll();return}
+var alive=false;
+var io=new IntersectionObserver(function(entries){
+  alive=true;
+  entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add("is-in");io.unobserve(e.target)}});
+},{rootMargin:"0px 0px -8% 0px",threshold:.06});
+Array.prototype.forEach.call(targets,function(el){io.observe(el)});
+setTimeout(function(){if(!alive){io.disconnect();revealAll()}},2500);
+
+/* ---- diagram arrows draw themselves ---- */
+document.querySelectorAll(".diagram .dg-arrow").forEach(function(line,i){
+  var len=Math.hypot(line.x2.baseVal.value-line.x1.baseVal.value,line.y2.baseVal.value-line.y1.baseVal.value);
+  line.style.setProperty("--len",len.toFixed(1));
+  line.style.setProperty("--i",i);
+});
+
+/* ---- process rail fills as the section is read ---- */
+var rail=document.querySelector(".process");
+if(rail){
+  var fill=rail.querySelector(".process-fill");
+  var steps=rail.querySelectorAll("article");
+  var pio=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(!e.isIntersecting)return;
+      e.target.classList.add("is-lit");
+      var lit=rail.querySelectorAll("article.is-lit").length;
+      if(fill)fill.style.setProperty("--p",(lit/steps.length).toFixed(3));
+    });
+  },{rootMargin:"0px 0px -35% 0px",threshold:.4});
+  steps.forEach(function(s){pio.observe(s)});
+}
+
+/* ---- parallax + magnetic CTA, desktop pointers only ----
+   Both are transform-only and read scroll state inside one rAF, so
+   nothing here forces a synchronous layout. */
+var fine=matchMedia("(hover:hover) and (pointer:fine)").matches;
+if(fine){
+  var layers=document.querySelectorAll(".parallax");
+  if(layers.length){
+    var ptick=false;
+    addEventListener("scroll",function(){
+      if(ptick)return;ptick=true;
+      requestAnimationFrame(function(){
+        layers.forEach(function(el){
+          var r=el.getBoundingClientRect();
+          if(r.bottom<0||r.top>innerHeight)return;
+          var mid=(r.top+r.height/2-innerHeight/2)/innerHeight;
+          el.style.transform="translate3d(0,"+(mid*-22).toFixed(2)+"px,0)";
+        });
+        ptick=false;
+      });
+    },{passive:true});
+  }
+  document.querySelectorAll(".magnetic").forEach(function(el){
+    el.addEventListener("pointermove",function(e){
+      var r=el.getBoundingClientRect();
+      var x=(e.clientX-r.left-r.width/2)/r.width;
+      var y=(e.clientY-r.top-r.height/2)/r.height;
+      el.style.transform="translate("+(x*7).toFixed(2)+"px,"+(y*7).toFixed(2)+"px)";
+    });
+    el.addEventListener("pointerleave",function(){el.style.transform=""});
+  });
+}
+})();</script></body></html>

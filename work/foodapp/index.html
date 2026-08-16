@@ -1,0 +1,156 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>FoodApp | Sercan Özkan</title><meta name="description" content="A PHP and MySQL ordering platform with separate admin, seller and customer panels, persistent carts, order tracking, ratings, favourites and loyalty points."><link rel="canonical" href="https://sercanozkan55.github.io/Portfolio/work/foodapp/"><meta property="og:title" content="FoodApp | Sercan Özkan"><meta property="og:description" content="A PHP and MySQL ordering platform with separate admin, seller and customer panels, persistent carts, order tracking, ratings, favourites and loyalty points."><meta property="og:type" content="website"><meta property="og:url" content="https://sercanozkan55.github.io/Portfolio/work/foodapp/"><meta property="og:image" content="https://sercanozkan55.github.io/Portfolio/assets/images/social-preview.jpg"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://sercanozkan55.github.io/Portfolio/assets/images/social-preview.jpg"><meta name="theme-color" content="#08090b"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap"><link rel="stylesheet" href="/Portfolio/assets/styles.css"><link rel="icon" href="/Portfolio/assets/favicon.svg"><script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Sercan Özkan","jobTitle":"Backend Engineer for AI and Data Products","url":"https://sercanozkan55.github.io/Portfolio/","email":"mailto:ozkansercan55@gmail.com","sameAs":["https://www.linkedin.com/in/sercan-%C3%B6zkan-a205852a7/","https://github.com/SercanOzkan55"],"knowsAbout":["Backend engineering","FastAPI","PostgreSQL","Retrieval-augmented generation","Circuit simulation","Unity XR"],"alumniOf":{"@type":"CollegeOrUniversity","name":"Istanbul Health and Technology University"}}</script><script>document.documentElement.classList.add("js");if(!matchMedia("(prefers-reduced-motion: reduce)").matches)document.documentElement.classList.add("js-motion")</script></head><body><a class="skip" href="#main">Skip to content</a><div class="nav-wrap"><div class="nav-bar"><div class="shell"><div class="nav"><a class="brand" href="/Portfolio/"><span class="brand-name">Sercan Özkan</span><span class="brand-role">Backend / Applied AI</span></a><button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Menu"><span></span><span></span><span></span></button><nav class="nav-links" id="nav-links" aria-label="Primary"><a href="/Portfolio/work/" aria-current="page">Work</a><a href="/Portfolio/#capabilities">Capabilities</a><a href="/Portfolio/about/">About</a><a href="/Portfolio/contact/">Contact</a><a class="nav-cta" href="/Portfolio/contact/">Let&apos;s talk <span class="arrow" aria-hidden="true">→</span></a></nav><p class="nav-live"><span class="status-dot" aria-hidden="true"></span>Open to roles</p></div></div><div class="scroll-progress" aria-hidden="true"></div></div></div><main id="main"><article>
+<header class="case-hero shell">
+  <a class="back" href="/Portfolio/work/">← All work</a>
+  <p class="project-index t-title"><span>05</span><span class="kind">FULL-STACK</span></p>
+  <div data-reveal><h1 class="display-sm"><span class="mask"><span>FoodApp </span></span></h1></div>
+  <p class="lede t-lede" data-reveal>One order, three role-specific views. A PHP and MySQL ordering platform with separate admin, seller and customer panels, persistent carts, order tracking, ratings, favourites and loyalty points.</p>
+  <p class="actions"><a class="button" href="https://github.com/SercanOzkan55/FoodApp">Source <span class="arrow" aria-hidden="true">↗</span></a></p>
+</header>
+
+<div class="shell"><dl class="overview" data-reveal-group><div><dt>Role</dt><dd>Solo — database model, role workflows, PHP views and UI</dd></div><div><dt>Repo activity</dt><dd>Dec 2025 – Feb 2026 · 15 commits</dd></div><div><dt>Status</dt><dd>Public repository · local XAMPP application</dd></div><div><dt>Problem</dt><dd>Keep restaurants, menus, carts, payments and delivery status consistent while each role sees a different job to do.</dd></div></dl></div>
+
+<figure class="proof shell" data-reveal>
+  <div class="proof-media"><img src="/Portfolio/assets/images/foodapp.webp" alt="Evidence for FoodApp: Role-based food ordering system" width="1600" height="900" decoding="async" fetchpriority="high"></div>
+  <figcaption><span class="label">Evidence</span>The repository's customer capture shows the running restaurant catalogue with search, category filters, favourites, cart access, ratings and loyalty state connected to the signed-in account.</figcaption>
+</figure>
+
+<section class="shell" data-reveal>
+  <p class="label label-accent">Architecture</p>
+  <h2 class="h2 t-heading">How the pieces fit</h2>
+  <figure class="exhibit"><div class="exhibit-figure"><svg viewBox="0 0 940 300" role="img" aria-label="FoodApp role and order architecture" class="diagram"><defs><marker id="dg-head" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-headfill"/></marker></defs><g class="dg-node dg-primary"><rect x="0" y="95" width="165" height="64" rx="2"/><text x="82.5" y="125" class="dg-label">Session auth</text><text x="82.5" y="142" class="dg-sub">role gate</text></g><g class="dg-node "><rect x="235" y="20" width="180" height="64" rx="2"/><text x="325" y="50" class="dg-label">Admin panel</text><text x="325" y="67" class="dg-sub">users · reporting</text></g><g class="dg-node dg-accent"><rect x="235" y="112" width="180" height="64" rx="2"/><text x="325" y="142" class="dg-label">Seller panel</text><text x="325" y="159" class="dg-sub">menu · order state</text></g><g class="dg-node "><rect x="235" y="204" width="180" height="64" rx="2"/><text x="325" y="234" class="dg-label">Customer panel</text><text x="325" y="251" class="dg-sub">cart · checkout</text></g><g class="dg-node "><rect x="520" y="95" width="180" height="64" rx="2"/><text x="610" y="125" class="dg-label">Order workflow</text><text x="610" y="142" class="dg-sub">pending → delivered</text></g><g class="dg-node "><rect x="775" y="95" width="165" height="64" rx="2"/><text x="857.5" y="125" class="dg-label">MySQL</text><text x="857.5" y="142" class="dg-sub">relational state</text></g><line x1="165" y1="120" x2="233" y2="52" class="dg-arrow" marker-end="url(#dg-head)"/><line x1="165" y1="127" x2="233" y2="144" class="dg-arrow" marker-end="url(#dg-head)"/><line x1="165" y1="136" x2="233" y2="236" class="dg-arrow" marker-end="url(#dg-head)"/><line x1="415" y1="52" x2="518" y2="112" class="dg-arrow" marker-end="url(#dg-head)"/><line x1="415" y1="144" x2="518" y2="126" class="dg-arrow" marker-end="url(#dg-head)"/><line x1="415" y1="236" x2="518" y2="145" class="dg-arrow" marker-end="url(#dg-head)"/><line x1="700" y1="127" x2="773" y2="127" class="dg-arrow" marker-end="url(#dg-head)"/><text x="0" y="292" class="dg-note">Menus, carts, payments, ratings and loyalty points meet at one persisted order record</text></svg></div><p class="exhibit-scroll" aria-hidden="true">Scroll the diagram →</p></figure>
+</section>
+
+<div class="case-body shell section">
+  <aside class="case-aside" data-reveal>
+    <p class="label">Stack</p>
+    <ul class="chips"><li>PHP</li><li>MySQL</li><li>Session auth</li><li>HTML</li><li>CSS</li><li>XAMPP</li></ul>
+    <ul class="chips chips-accent"><li>3 role panels</li><li>Order lifecycle</li><li>Ratings + points</li></ul>
+  </aside>
+  <div class="case-main">
+    <section data-reveal><p class="label label-accent">Challenge</p><h2>What needed to change</h2><p>Model a complete order lifecycle across customers, sellers and administrators without mixing permissions or losing the relationship between an order, its line items and its payment state.</p></section>
+    <section data-reveal><p class="label label-accent">Approach</p><h2>How I built it</h2><ol><li>Gated each panel with session-based role checks, then separated admin, seller and customer routes so navigation and actions follow the user's job rather than one overloaded dashboard.</li><li>Modelled users, restaurants, menus, carts, orders, order items, payments, ratings, favourites and loyalty points in MySQL with the order record as the workflow centre.</li><li>At checkout, copied cart lines into order items, recorded payment and loyalty-point changes, cleared the cart, and handed the order to the seller's status flow from pending through delivery.</li></ol></section>
+    <section data-reveal><p class="label label-accent">Engineering decisions</p><h2>Why it is built this way</h2><dl class="decisions"><div><dt>Role-specific panels</dt><dd>A seller needs menu and incoming-order controls; a customer needs discovery, checkout and tracking. Separate panels keep permission checks and interface decisions legible.</dd></div><div><dt>Order items as a snapshot</dt><dd>A menu price can change after checkout. Persisting quantity and price on the order line preserves what the customer actually bought.</dd></div><div><dt>Relational state for the workflow</dt><dd>Orders connect users, restaurants, payments and ratings. Foreign-key relationships make those joins explicit and keep reporting possible.</dd></div></dl></section>
+    <section data-reveal><p class="label label-accent">Testing</p><h2>How it is verified</h2><p>The repository documents and captures the main manual flows: registration and login, role dashboards, restaurant and menu management, cart and checkout, status updates, favourites, ratings and loyalty points. No automated test suite is documented, so none is claimed.</p></section>
+    <section data-reveal><p class="label label-accent">Result</p><h2>What landed</h2><p>The application covers the complete local ordering loop: customers browse and buy, sellers manage menus and fulfil orders, and administrators manage users and inspect system activity from a separate panel.</p></section>
+    <section class="limit" data-reveal><p class="label">What is not finished</p><h2 class="h3">Honest limits</h2><p>This is an educational local application, not a production deployment. Several database writes still need prepared statements and transaction boundaries, and production use would also require CSRF protection, environment-based secrets, automated tests and deployment automation.</p></section>
+  </div>
+</div>
+
+<div class="shell"><nav class="next-case" aria-label="Next case study">
+  <p class="label">Next case</p>
+  <a href="/Portfolio/work/millionaire/">Who Wants to Be a Millionaire? <span class="arrow" aria-hidden="true">→</span></a>
+</nav></div>
+</article></main><footer class="site-footer shell"><div class="footer-id"><b>Sercan Özkan</b><span>Backend engineer for AI and data products. Decisions, evidence, and honest limits.</span></div><nav class="footer-links" aria-label="Footer"><a href="/Portfolio/work/">Work</a><a href="/Portfolio/about/">About</a><a href="https://github.com/SercanOzkan55">GitHub</a><a href="https://www.linkedin.com/in/sercan-%C3%B6zkan-a205852a7/">LinkedIn</a><a href="mailto:ozkansercan55@gmail.com">Email</a><a href="/Portfolio/assets/Sercan_Ozkan_CV_EN.pdf">CV</a></nav><p class="footer-note"><span>© 2026 Sercan Özkan</span><span>Designed and built by me — static site, one live endpoint</span></p></footer><script>(function(){
+var root=document.documentElement;
+var motion=root.classList.contains("js-motion");
+
+/* ---- mobile navigation: a sheet, not a cramped dropdown ---- */
+var bar=document.querySelector(".nav-bar");
+var toggle=document.querySelector(".nav-toggle");
+if(toggle&&bar){
+  var close=function(){document.body.classList.remove("nav-open");toggle.setAttribute("aria-expanded","false")};
+  toggle.addEventListener("click",function(){
+    var open=document.body.classList.toggle("nav-open");
+    toggle.setAttribute("aria-expanded",open?"true":"false");
+  });
+  document.querySelectorAll(".nav-links a").forEach(function(a){a.addEventListener("click",close)});
+  addEventListener("keydown",function(e){if(e.key==="Escape")close()});
+}
+
+/* ---- sticky header state + scroll progress ---- */
+var progress=document.querySelector(".scroll-progress");
+var stuck=false,ticking=false;
+function onScroll(){
+  if(ticking)return;ticking=true;
+  requestAnimationFrame(function(){
+    var y=scrollY;
+    var s=y>16;
+    if(s!==stuck&&bar){stuck=s;bar.classList.toggle("is-stuck",s)}
+    if(progress){
+      var h=document.documentElement.scrollHeight-innerHeight;
+      progress.style.transform="scaleX("+(h>0?Math.min(y/h,1):0)+")";
+    }
+    ticking=false;
+  });
+}
+addEventListener("scroll",onScroll,{passive:true});onScroll();
+
+if(!motion)return;
+
+/* ---- reveals ----
+   Reveal styles hide content until a callback runs, so the callback not
+   running must never be able to swallow the page. IntersectionObserver
+   reports every target once on observe, which makes it its own health
+   check: no report at all means it is throttled or absent, and
+   everything is shown outright. */
+var targets=document.querySelectorAll("[data-reveal],[data-reveal-group]");
+function revealAll(){root.classList.remove("js-motion")}
+document.querySelectorAll("[data-reveal-group]").forEach(function(g){
+  Array.prototype.forEach.call(g.children,function(c,i){c.style.setProperty("--i",i)});
+});
+document.querySelectorAll(".mask").forEach(function(m,i){m.style.setProperty("--i",i%6)});
+
+if(!("IntersectionObserver" in window)){revealAll();return}
+var alive=false;
+var io=new IntersectionObserver(function(entries){
+  alive=true;
+  entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add("is-in");io.unobserve(e.target)}});
+},{rootMargin:"0px 0px -8% 0px",threshold:.06});
+Array.prototype.forEach.call(targets,function(el){io.observe(el)});
+setTimeout(function(){if(!alive){io.disconnect();revealAll()}},2500);
+
+/* ---- diagram arrows draw themselves ---- */
+document.querySelectorAll(".diagram .dg-arrow").forEach(function(line,i){
+  var len=Math.hypot(line.x2.baseVal.value-line.x1.baseVal.value,line.y2.baseVal.value-line.y1.baseVal.value);
+  line.style.setProperty("--len",len.toFixed(1));
+  line.style.setProperty("--i",i);
+});
+
+/* ---- process rail fills as the section is read ---- */
+var rail=document.querySelector(".process");
+if(rail){
+  var fill=rail.querySelector(".process-fill");
+  var steps=rail.querySelectorAll("article");
+  var pio=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(!e.isIntersecting)return;
+      e.target.classList.add("is-lit");
+      var lit=rail.querySelectorAll("article.is-lit").length;
+      if(fill)fill.style.setProperty("--p",(lit/steps.length).toFixed(3));
+    });
+  },{rootMargin:"0px 0px -35% 0px",threshold:.4});
+  steps.forEach(function(s){pio.observe(s)});
+}
+
+/* ---- parallax + magnetic CTA, desktop pointers only ----
+   Both are transform-only and read scroll state inside one rAF, so
+   nothing here forces a synchronous layout. */
+var fine=matchMedia("(hover:hover) and (pointer:fine)").matches;
+if(fine){
+  var layers=document.querySelectorAll(".parallax");
+  if(layers.length){
+    var ptick=false;
+    addEventListener("scroll",function(){
+      if(ptick)return;ptick=true;
+      requestAnimationFrame(function(){
+        layers.forEach(function(el){
+          var r=el.getBoundingClientRect();
+          if(r.bottom<0||r.top>innerHeight)return;
+          var mid=(r.top+r.height/2-innerHeight/2)/innerHeight;
+          el.style.transform="translate3d(0,"+(mid*-22).toFixed(2)+"px,0)";
+        });
+        ptick=false;
+      });
+    },{passive:true});
+  }
+  document.querySelectorAll(".magnetic").forEach(function(el){
+    el.addEventListener("pointermove",function(e){
+      var r=el.getBoundingClientRect();
+      var x=(e.clientX-r.left-r.width/2)/r.width;
+      var y=(e.clientY-r.top-r.height/2)/r.height;
+      el.style.transform="translate("+(x*7).toFixed(2)+"px,"+(y*7).toFixed(2)+"px)";
+    });
+    el.addEventListener("pointerleave",function(){el.style.transform=""});
+  });
+}
+})();</script></body></html>
