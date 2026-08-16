@@ -211,10 +211,10 @@ function setFieldError(input,message){
 function validate(input){var message=input.validity.valid?"":errorText(input);setFieldError(input,message);return !message}
 function clearErrors(){fields.forEach(function(input){setFieldError(input,"")})}
 fields.forEach(function(input){
-  input.addEventListener("blur",function(){validate(input)});
+  input.addEventListener("blur",function(){if(form.dataset.state!=="ok")validate(input)});
   input.addEventListener("input",function(){
     if(input.getAttribute("aria-invalid")==="true")validate(input);
-    if(form.dataset.state==="error")say("","idle");
+    if(form.dataset.state==="error"||form.dataset.state==="ok")say("","idle");
   });
 });
 function markBackendInvalid(field){
