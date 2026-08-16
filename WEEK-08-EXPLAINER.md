@@ -7,14 +7,15 @@ You type a message, press send, and it lands in my email inbox.
 **Live URL of the feature:** https://sercanozkan55.github.io/Portfolio/contact/
 **The backend:** `https://portfolio-contact-api.portfolio-contact-api.workers.dev/api/contact`
 (source in [`contact-api/`](contact-api/))
-**Evidence to attach:** a screenshot of the "Message sent" state on the live page, plus a
-screenshot of the email as it arrived in my inbox. Those two images prove both halves of
-the same feature: the browser got a success response, and the message actually arrived.
+**Evidence:** [`output/playwright/week-08-contact-success.png`](output/playwright/week-08-contact-success.png)
+captures the "Message sent" state from the published page. I place the matching inbox
+email screenshot beside it in the track post. Those two images prove both halves of the
+same feature: the browser got a success response, and the message actually arrived.
 
-**Verification record — 16 August 2026:** the live GitHub Pages origin posted a real message
-to the deployed Worker. The Worker validated it, passed the KV rate-limit check, Resend
-accepted it, and the endpoint returned `200 {"ok":true}`. The final thread evidence is the
-matching email in my inbox; I attach that screenshot beside the live success state.
+**Verification record — 16 August 2026:** the published contact page was opened in a real
+WebKit browser and submitted end to end. The Worker validated the message, passed the KV
+rate-limit check, Resend accepted it, and the page changed to "Message sent" with no field
+left in an error state.
 
 ---
 
